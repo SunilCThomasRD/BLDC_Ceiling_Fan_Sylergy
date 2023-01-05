@@ -1,0 +1,103 @@
+C51 COMPILER V9.60.0.0   NEC_IR                                                            12/19/2022 10:49:29 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE NEC_IR
+OBJECT MODULE PLACED IN .\Objects\NEC IR.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\NEC IR.c LARGE OPTIMIZE(4,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\L
+                    -istings\NEC IR.lst) TABS(2) OBJECT(.\Objects\NEC IR.obj)
+
+line level    source
+
+   1          #include  "A94B114.h"
+   2          #include  "func_def.h"
+   3          
+   4          unsigned char RemoteGetKeyProcess(long value)
+   5          {
+   6   1        unsigned char ADDH,ADDL,DATAH,DATAL;
+   7   1        ADDH = (long)(value>>24)&0xFF;
+   8   1        ADDL = (long)(value>>16)&0xFF;
+   9   1        DATAH = (long)(value>>8)&0xFF;
+  10   1        DATAL = value&0xFF;
+  11   1        if((DATAH ^ DATAL) != 0xFF)
+  12   1        {
+  13   2          return(GARBAGE_DATA_RECEIVED);
+  14   2        }
+  15   1        switch(value)
+  16   1        {
+  17   2          case KEY1:
+  18   2            //OPERATION
+  19   2            return(POWER);
+  20   2            break;
+  21   2          case KEY2:
+  22   2            //OPERATION
+  23   2            return(LIGHT);
+  24   2            break;
+  25   2          case KEY3:
+  26   2            //OPERATION
+  27   2            return(FAN_SPEED_1);
+  28   2            break;
+  29   2          case KEY4:
+  30   2            //OPERATION
+  31   2            return(FAN_SPEED_2);
+  32   2            break;
+  33   2          case KEY5:
+  34   2            //OPERATION
+  35   2            return(FAN_SPEED_3);
+  36   2            break;
+  37   2          case KEY6:
+  38   2            //OPERATION
+  39   2            return(FAN_SPEED_4);
+  40   2            break;
+  41   2          case KEY7:
+  42   2            //OPERATION
+  43   2            return(FAN_SPEED_5);
+  44   2            break;
+  45   2          case KEY8:
+  46   2            //OPERATION
+  47   2            return(FAN_SPEED_6);
+  48   2            break;
+  49   2          case KEY9:
+  50   2            //OPERATION
+  51   2            return(BOOST);
+  52   2            break;
+  53   2          case KEY10:
+  54   2            //OPERATION
+C51 COMPILER V9.60.0.0   NEC_IR                                                            12/19/2022 10:49:29 PAGE 2   
+
+  55   2            return(TIME_2HRS);
+  56   2            break;
+  57   2          case KEY11:
+  58   2            //OPERATION
+  59   2            return(TIME_4HRS);
+  60   2            break;
+  61   2          case KEY12:
+  62   2            //OPERATION
+  63   2            return(TIME_8HRS);
+  64   2            break;
+  65   2          case KEY13:
+  66   2            //OPERATION
+  67   2            return(REVERSE_MODE);
+  68   2            break;
+  69   2          case KEY14:
+  70   2            //OPERATION
+  71   2            return(SLEEP_MODE);
+  72   2            break;
+  73   2          default:
+  74   2            //opearation
+  75   2            return(GARBAGE_DATA_RECEIVED);
+  76   2        }   
+  77   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    252    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       6
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

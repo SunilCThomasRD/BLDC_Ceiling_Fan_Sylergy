@@ -1,0 +1,1 @@
+"src\flash.c" LARGE OPTIMIZE (4,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\flash.lst) TABS (2) SRC (.\Objects\flash.SRC)

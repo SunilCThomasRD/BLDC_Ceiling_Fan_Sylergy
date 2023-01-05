@@ -1,0 +1,377 @@
+C51 COMPILER V9.60.0.0   I2C                                                               12/19/2022 10:49:29 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE I2C
+OBJECT MODULE PLACED IN .\Objects\I2C.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\I2C.C LARGE OPTIMIZE(4,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\I2C.lst) TABS(2) OBJECT(.\Objects\I2C.obj)
+
+line level    source
+
+   1          #include  "A94B114.h"
+   2          #include  "func_def.h"
+   3          #include  "MotorPara.h"
+   4          
+   5          unsigned char MTP_Programming_Staus;
+   6          
+   7          void I2C_Parameter_syllergy(void)
+   8          {
+   9   1        unsigned char status = 0;
+  10   1        //MTP_Read();
+  11   1        i2c_devicew(0xF1, 0x2B);
+  12   1        delaytime(100);
+  13   1        status = Syllergy_MTP_Verify();
+  14   1        if(status == OK)
+  15   1          return;
+  16   1        i2c_devicew(EECtrl_Base_address, 0xC0);
+  17   1        delaytime(100);
+  18   1        i2c_devicew(0xF1, 0x2B);
+  19   1        delaytime(100);
+  20   1        //Write Motor Para
+  21   1        MTP_Write();  
+  22   1        //--------
+  23   1        i2c_devicew(DecCtrl_Base_address, 0xB6);
+  24   1        delaytime(100);
+  25   1        i2c_devicew(EECtrl_Base_address, 0xD0);
+  26   1        delaytime(10000);
+  27   1        //wait for 36msec
+  28   1        do{
+  29   2          MTP_Programming_Staus = i2c_devicer(EECtrl_Base_address);   
+  30   2          MTP_Programming_Staus = (MTP_Programming_Staus & 0x10);
+  31   2        }while(MTP_Programming_Staus);
+  32   1        status = 0;
+  33   1        //MTP_Read();
+  34   1        status = Syllergy_MTP_Verify();
+  35   1        if(status == OK)
+  36   1        {
+  37   2          /*i2c_devicew(EECtrl_Base_address, 0x00);
+  38   2          delaytime(100);
+  39   2          i2c_devicew(DecCtrl_Base_address, 0x00);
+  40   2          delaytime(100);*/
+  41   2          return;
+  42   2        }
+  43   1        else
+  44   1        {
+  45   2          I2C_Parameter_syllergy();
+  46   2        }
+  47   1        //P2IO = 0xF4;
+  48   1        //Refresh I2c /*registerdata  */
+  49   1        /*
+  50   1        i2c_devicew(EECtrl_Base_address, 0x40);
+  51   1        i2c_devicew(DecCtrl_Base_address, 0xB6);
+  52   1        i2c_devicew(EECtrl_Base_address, 0x20);
+  53   1        
+  54   1        // wait 10msec
+C51 COMPILER V9.60.0.0   I2C                                                               12/19/2022 10:49:29 PAGE 2   
+
+  55   1        do{
+  56   1          MTP_Refreshing_Staus = i2c_devicer(EECtrl_Base_address);    
+  57   1          MTP_Refreshing_Staus = (MTP_Refreshing_Staus & 0x20);
+  58   1        }while(MTP_Programming_Staus);*/
+  59   1      }
+  60          
+  61          void i2c_devicew(unsigned char i2c_base,unsigned char i2c_s)
+  62          {
+  63   1        i2c_start();
+  64   1        i2c_send(0x68);
+  65   1        i2c_send(i2c_base);
+  66   1        i2c_send(i2c_s);
+  67   1        i2c_stop();
+  68   1        delaytime(1000);
+  69   1      }
+  70          
+  71          unsigned char i2c_devicer(unsigned char i2c_base)
+  72          {
+  73   1        unsigned char i2c_s;
+  74   1        i2c_start();
+  75   1        i2c_send(0x68);
+  76   1        i2c_send(i2c_base);
+  77   1        i2c_stop();
+  78   1        i2c_start();
+  79   1        i2c_send(0x69);
+  80   1        i2c_s = i2c_get();
+  81   1        i2c_nack();
+  82   1        i2c_stop();
+  83   1        return(i2c_s);
+  84   1      }
+  85          
+  86          
+  87          void i2c_start(void)
+  88          {  
+  89   1        //GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_OUT_OD_HIZ_SLOW);
+  90   1        P2IO |= (1<<1);
+  91   1        P2PU |= (1<<1);
+  92   1        delaytime(100);
+  93   1        //GPIO_WriteHigh(GPIOC, GPIO_PIN_4);
+  94   1        P2 |= (1<<1);
+  95   1        //GPIO_WriteHigh(GPIOC, GPIO_PIN_5);
+  96   1        P2 |= (1<<0);
+  97   1        delaytime(100);
+  98   1        //GPIO_WriteLow(GPIOC, GPIO_PIN_4);
+  99   1        P2 &= ~(1<<1);
+ 100   1        delaytime(100);
+ 101   1        //GPIO_WriteLow(GPIOC, GPIO_PIN_5);
+ 102   1        P2 &= ~(1<<0);
+ 103   1        delaytime(100);
+ 104   1      }
+ 105          
+ 106          void i2c_stop(void)
+ 107          {
+ 108   1        //GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_OUT_OD_HIZ_SLOW);
+ 109   1        P2IO |= (1<<1);
+ 110   1        P2PU |= (1<<1);
+ 111   1        delaytime(100);
+ 112   1        //GPIO_WriteLow(GPIOC, GPIO_PIN_4);
+ 113   1        P2 &= ~(1<<1);
+ 114   1        delaytime(100);
+ 115   1        //GPIO_WriteHigh(GPIOC, GPIO_PIN_5);
+ 116   1        P2 |= (1<<0);
+C51 COMPILER V9.60.0.0   I2C                                                               12/19/2022 10:49:29 PAGE 3   
+
+ 117   1        delaytime(100);
+ 118   1        //GPIO_WriteHigh(GPIOC, GPIO_PIN_4);
+ 119   1        P2 |= (1<<1);
+ 120   1      }
+ 121          
+ 122          void i2c_ack(void)
+ 123          {
+ 124   1        //GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_OUT_OD_HIZ_SLOW);
+ 125   1        P2IO |= (1<<1);
+ 126   1        P2PU |= (1<<1);
+ 127   1        delaytime(100);
+ 128   1        //GPIO_WriteLow(GPIOC, GPIO_PIN_4);
+ 129   1        P2 &= ~(1<<1);
+ 130   1        //GPIO_WriteHigh(GPIOC, GPIO_PIN_5);
+ 131   1        P2 |= (1<<0);
+ 132   1        delaytime(100);
+ 133   1        //GPIO_WriteLow(GPIOC, GPIO_PIN_5);
+ 134   1        P2 &= ~(1<<0);
+ 135   1      }
+ 136          
+ 137          void i2c_nack(void)
+ 138          {
+ 139   1        //GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_OUT_OD_HIZ_SLOW);
+ 140   1        P2IO |= (1<<1);
+ 141   1        P2PU |= (1<<1);
+ 142   1        delaytime(100);
+ 143   1        //GPIO_WriteHigh(GPIOC, GPIO_PIN_4);
+ 144   1        P2 |= (1<<1);
+ 145   1        //GPIO_WriteHigh(GPIOC, GPIO_PIN_5);
+ 146   1        P2 |= (1<<0);
+ 147   1        delaytime(100);
+ 148   1        //GPIO_WriteLow(GPIOC, GPIO_PIN_5);
+ 149   1        P2 &= ~(1<<0);
+ 150   1      }
+ 151          
+ 152          /******************************************************************************************
+ 153          function to sent 8 bits to the I2C device for writing
+ 154          ******************************************************************************************/
+ 155          
+ 156          void i2c_send(int a)
+ 157          {
+ 158   1        int i=0x80,j;
+ 159   1        //GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_OUT_OD_HIZ_SLOW);
+ 160   1        P2IO |= (1<<1);
+ 161   1        P2PU |= (1<<1);
+ 162   1        delaytime(100);
+ 163   1        
+ 164   1        for(j=0x08;j>0x00;j--)
+ 165   1        {
+ 166   2          if((a & i) != 0x00)
+ 167   2            //GPIO_WriteHigh(GPIOC, GPIO_PIN_4);
+ 168   2            P2 |= (1<<1);
+ 169   2          else
+ 170   2            //GPIO_WriteLow(GPIOC, GPIO_PIN_4);
+ 171   2            P2 &= ~(1<<1);
+ 172   2          
+ 173   2          //GPIO_WriteHigh(GPIOC, GPIO_PIN_5);
+ 174   2          P2 |= (1<<0);
+ 175   2          delaytime(100);
+ 176   2          //GPIO_WriteLow(GPIOC, GPIO_PIN_5);
+ 177   2          P2 &= ~(1<<0);
+ 178   2          delaytime(100);
+C51 COMPILER V9.60.0.0   I2C                                                               12/19/2022 10:49:29 PAGE 4   
+
+ 179   2          i = i>>1;
+ 180   2        }
+ 181   1        //GPIO_WriteHigh(GPIOC, GPIO_PIN_4);
+ 182   1        P2 |= (1<<1);
+ 183   1        //GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_IN_FL_NO_IT);
+ 184   1        P2IO &= ~(1<<1);
+ 185   1        delaytime(100);
+ 186   1        //GPIO_WriteHigh(GPIOC, GPIO_PIN_5);
+ 187   1        P2 |= (1<<0);
+ 188   1        delaytime(100);
+ 189   1        //GPIO_WriteLow(GPIOC, GPIO_PIN_5);
+ 190   1        P2 &= ~(1<<0);
+ 191   1        delaytime(100);
+ 192   1      }
+ 193          
+ 194          /******************************************************************************************
+ 195          function to receive 8 bits from the I2C device
+ 196          ******************************************************************************************/
+ 197          
+ 198          int i2c_get(void)
+ 199          {
+ 200   1        int a=0,temp1,b;
+ 201   1        //GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_IN_FL_NO_IT);
+ 202   1        P2IO &= ~(1<<1);
+ 203   1        delaytime(100);
+ 204   1        for(temp1=0x08;temp1>0x00;temp1--)
+ 205   1        {
+ 206   2          delaytime(100);
+ 207   2          //GPIO_WriteHigh(GPIOC, GPIO_PIN_5);
+ 208   2          P2 |= (1<<0);
+ 209   2        //  while(!scl)
+ 210   2        //    ;
+ 211   2          delaytime(100);
+ 212   2          a = a << 0x01;
+ 213   2          b = (P2 & 0x02);//GPIO_ReadInputPin(GPIOC, GPIO_PIN_4);
+ 214   2          if(b)
+ 215   2            a = a | 0x01;
+ 216   2          else
+ 217   2            a = a | 0X00;
+ 218   2          //GPIO_WriteLow(GPIOC, GPIO_PIN_5);
+ 219   2          P2 &= ~(1<<0);
+ 220   2        }
+ 221   1        //GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_OUT_OD_HIZ_SLOW);
+ 222   1        P2IO |= (1<<1);
+ 223   1        P2PU |= (1<<1);
+ 224   1        delaytime(100);
+ 225   1        //GPIO_WriteHigh(GPIOC, GPIO_PIN_4);
+ 226   1        P2 |= (1<<1);
+ 227   1        delaytime(100);
+ 228   1        //GPIO_WriteHigh(GPIOC, GPIO_PIN_5);
+ 229   1        P2 |= (1<<0);
+ 230   1        delaytime(100);
+ 231   1        //GPIO_WriteLow(GPIOC, GPIO_PIN_5);
+ 232   1        P2 &= ~(1<<0);
+ 233   1        delaytime(100);
+ 234   1        return(a);
+ 235   1      }
+ 236          
+ 237          void delaytime(unsigned int ch)
+ 238          {
+ 239   1        unsigned int i=0;
+ 240   1        for(i=0;i<ch;i++)
+C51 COMPILER V9.60.0.0   I2C                                                               12/19/2022 10:49:29 PAGE 5   
+
+ 241   1        {
+ 242   2          //for(j=0;j<ch;j++);
+ 243   2        }
+ 244   1      }
+ 245          
+ 246          void MTP_Write(void)
+ 247          {
+ 248   1        i2c_devicew(MotorPara1_Base_address, MotorPara1_Value);
+ 249   1        delaytime(100);
+ 250   1        i2c_devicew(MotorPara2_Base_address, MotorPara2_Value);
+ 251   1        delaytime(100);
+ 252   1        i2c_devicew(MotorPara3_Base_address, MotorPara3_Value);
+ 253   1        delaytime(100);
+ 254   1        i2c_devicew(MotorPara4_Base_address, MotorPara4_Value);
+ 255   1        delaytime(100);
+ 256   1        i2c_devicew(MotorPara5_Base_address, MotorPara5_Value);
+ 257   1        delaytime(100);
+ 258   1        
+ 259   1        i2c_devicew(SysOpt0_Base_address, SysOpt0_Value);
+ 260   1        delaytime(100);
+ 261   1        i2c_devicew(SysOpt1_Base_address, SysOpt1_Value);
+ 262   1        delaytime(100);
+ 263   1        i2c_devicew(SysOpt2_Base_address, SysOpt2_Value);
+ 264   1        delaytime(100);
+ 265   1        i2c_devicew(SysOpt3_Base_address, SysOpt3_Value);
+ 266   1        delaytime(100);
+ 267   1        i2c_devicew(SysOpt4_Base_address, SysOpt4_Value);
+ 268   1        delaytime(100);
+ 269   1        i2c_devicew(SysOpt5_Base_address, SysOpt5_Value);
+ 270   1        delaytime(100);
+ 271   1        i2c_devicew(SysOpt6_Base_address, SysOpt6_Value);
+ 272   1        delaytime(100);
+ 273   1        i2c_devicew(SysOpt7_Base_address, SysOpt7_Value);
+ 274   1        delaytime(100);
+ 275   1        i2c_devicew(SysOpt8_Base_address, SysOpt8_Value);
+ 276   1        delaytime(100);
+ 277   1        i2c_devicew(SysOpt9_Base_address, SysOpt9_Value);
+ 278   1        delaytime(100);
+ 279   1        i2c_devicew(SysOpt10_Base_address, SysOpt10_Value);
+ 280   1        delaytime(100);
+ 281   1        i2c_devicew(SysOpt11_Base_address, SysOpt11_Value);
+ 282   1        delaytime(100);
+ 283   1        i2c_devicew(SysOpt12_Base_address, SysOpt12_Value);
+ 284   1        delaytime(100);
+ 285   1        i2c_devicew(SysOpt13_Base_address, SysOpt13_Value);
+ 286   1        delaytime(100);
+ 287   1        i2c_devicew(SysOpt14_Base_address, SysOpt14_Value);
+ 288   1        delaytime(100);
+ 289   1        
+ 290   1      }
+ 291          unsigned char dummy1;
+ 292          unsigned char Syllergy_MTP_Verify(void)
+ 293          {
+ 294   1        unsigned char Motor_MTP_Para[20]= {MotorPara1_Value,MotorPara2_Value,MotorPara3_Value,MotorPara4_Value,Mo
+             -torPara5_Value,
+ 295   1        SysOpt0_Value,SysOpt1_Value,SysOpt2_Value,SysOpt3_Value,SysOpt4_Value,SysOpt5_Value,SysOpt6_Value,SysOpt7
+             -_Value,SysOpt8_Value,
+ 296   1        SysOpt9_Value,SysOpt10_Value,SysOpt11_Value,SysOpt12_Value,SysOpt13_Value,SysOpt14_Value};
+ 297   1        unsigned char i=0,dummy,temp;
+ 298   1        //unsigned char dataArray[20];
+ 299   1        for(i=0;i<=19;i++)
+ 300   1        {
+C51 COMPILER V9.60.0.0   I2C                                                               12/19/2022 10:49:29 PAGE 6   
+
+ 301   2          dummy1 = i2c_devicer(32+i);
+ 302   2          if(i <= 18)
+ 303   2          {
+ 304   3            if(dummy1 != Motor_MTP_Para[i])
+ 305   3              return NOK;
+ 306   3          }
+ 307   2          else
+ 308   2          {
+ 309   3            dummy1 = dummy1 & 0xF0;
+ 310   3            temp = Motor_MTP_Para[i]&0xF0;
+ 311   3            if(dummy1 != temp)
+ 312   3              return NOK;
+ 313   3          }
+ 314   2        }
+ 315   1        return OK;
+ 316   1      }
+*** WARNING C280 IN LINE 297 OF src\I2C.C: 'dummy': unreferenced local variable
+ 317          
+ 318          
+ 319          void I2C_Motor_Start(void)
+ 320          {
+ 321   1        i2c_devicew(OverRide_Base_address, 0x80);
+ 322   1        i2c_devicew(speedCtrl_Base_address, FAN_OFF_VALUE);   
+ 323   1      }
+ 324          
+ 325          void i2c_speed(unsigned char ch)
+ 326          {
+ 327   1        unsigned char temp;
+ 328   1        P2IO |= 0x03;
+ 329   1        P2PU |= 0x03;     // pullup
+ 330   1        P2 |= 0X03;
+ 331   1        i2c_devicew(speedCtrl_Base_address, ch);
+ 332   1        do{
+ 333   2          temp = i2c_devicer(speedCtrl_Base_address);
+ 334   2        }while(temp != ch); 
+ 335   1        P2IO &= ~0x03;
+ 336   1        P2PU &= ~0X03;
+ 337   1      }
+ 338          //GPIO_PIN_4  ---------  SDA
+ 339          //GPIO_PIN_5  -----------SCL
+ 340          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1203    ----
+   CONSTANT SIZE    =     20    ----
+   XDATA SIZE       =      2      38
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

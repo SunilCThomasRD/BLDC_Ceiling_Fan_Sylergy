@@ -1,0 +1,1481 @@
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\flash.OBJ
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE .\Objects\flash.src PR(.\Listings\flash.ls1) EP DEBUG
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; .\Objects\flash.SRC generated from: src\flash.c
+                       2     ; COMPILER INVOKED BY:
+                       3     ;        C:\Keil_v5\C51\BIN\C51.EXE src\flash.c LARGE OPTIMIZE(4,SPEED) BROWSE DEBUG OBJECT
+                             EXTEND PRINT(.\Listings\flash.lst) TABS(2) SRC(.\Objects\flash.SRC)
+                       4     
+                       5     $nomod51 
+                       6     
+                       7     NAME    FLASH
+                       8     
+  00C0                 9     I2C_INT_EN      BIT     0C0H.0
+  0080                10     P0      DATA    080H
+  0088                11     P1      DATA    088H
+  0084                12     DBTSR   DATA    084H
+  0090                13     P2      DATA    090H
+  00D6                14     AC      BIT     0D0H.6
+  00BF                15     EA      BIT     0B8H.7
+  008E                16     WDTCR   DATA    08EH
+  009E                17     P0DB    DATA    09EH
+  00D7                18     CMPTR   DATA    0D7H
+  00D3                19     TDISR   DATA    0D3H
+  00A6                20     P1DB    DATA    0A6H
+  00C8                21     ADC_INT_EN      BIT     0C8H.0
+  00C1                22     UART_RX_INT_EN  BIT     0C0H.1
+  00AE                23     P2DB    DATA    0AEH
+  00D2                24     TESTH   DATA    0D2H
+  00C2                25     UART_TX_INT_EN  BIT     0C0H.2
+  00D1                26     TESTL   DATA    0D1H
+  00B8                27     IE      DATA    0B8H
+  0083                28     DPH1    DATA    083H
+  008D                29     WDTMR   DATA    08DH
+  0082                30     DPL1    DATA    082H
+  00E4                31     USTAT   DATA    0E4H
+  008A                32     IOFFSET DATA    08AH
+  00A2                33     EO      DATA    0A2H
+  009D                34     P0OD    DATA    09DH
+  00A5                35     P1OD    DATA    0A5H
+  00AD                36     P2OD    DATA    0ADH
+  0095                37     ADCM    DATA    095H
+  00E8                38     IP      DATA    0E8H
+  009B                39     P0IO    DATA    09BH
+  00A3                40     P1IO    DATA    0A3H
+  0092                41     T0CR    DATA    092H
+  00BA                42     T1CR    DATA    0BAH
+  00AB                43     P2IO    DATA    0ABH
+  0096                44     ADCR    DATA    096H
+  0094                45     T0DR    DATA    094H
+  00D7                46     CY      BIT     0D0H.7
+  00C2                47     T2CR    DATA    0C2H
+  00A0                48     IRQ0    DATA    0A0H
+  00A8                49     IRQ1    DATA    0A8H
+  00B0                50     IRQ2    DATA    0B0H
+  00CA                51     BIT_INT_EN      BIT     0C8H.2
+  00F2                52     FECR    DATA    0F2H
+  00B8                53     CMP_INT_EN      BIT     0B8H.0
+  00EF                54     FEDR    DATA    0EFH
+  0081                55     SP      DATA    081H
+  00A4                56     EINT_INT_F      BIT     0A0H.4
+  00D2                57     OV      BIT     0D0H.2
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE     2
+
+  00FE                58     I2CSAR  DATA    0FEH
+  00BD                59     T1ADRH  DATA    0BDH
+  009C                60     P0PU    DATA    09CH
+  00C5                61     T2ADRH  DATA    0C5H
+  00BF                62     T1BDRH  DATA    0BFH
+  00A4                63     P1PU    DATA    0A4H
+  00CD                64     T1CDRH  DATA    0CDH
+  00C7                65     T2BDRH  DATA    0C7H
+  00AC                66     P2PU    DATA    0ACH
+  00CF                67     T1DDRH  DATA    0CFH
+  00C9                68     EIFLAG  DATA    0C9H
+  00BC                69     T1ADRL  DATA    0BCH
+  00F1                70     FEMR    DATA    0F1H
+  00C4                71     T2ADRL  DATA    0C4H
+  00BE                72     T1BDRL  DATA    0BEH
+  008B                73     EIPOL0  DATA    08BH
+  00EC                74     FPCR    DATA    0ECH
+  00D9                75     SCCR    DATA    0D9H
+  00CC                76     T1CDRL  DATA    0CCH
+  00CB                77     LVI_INT_EN      BIT     0C8H.3
+  00C6                78     T2BDRL  DATA    0C6H
+  008C                79     EIPOL1  DATA    08CH
+  00CE                80     T1DDRL  DATA    0CEH
+  00C9                81     WDT_INT_EN      BIT     0C8H.1
+  0080                82     P00     BIT     080H.0
+  00F3                83     FESR    DATA    0F3H
+  00A8                84     I2C_INT_F       BIT     0A8H.0
+  00A1                85     EIN10_INT_F     BIT     0A0H.1
+  0088                86     P10     BIT     088H.0
+  0087                87     PCON    DATA    087H
+  0081                88     P01     BIT     080H.1
+  00E7                89     FETR    DATA    0E7H
+  00A2                90     EIN11_INT_F     BIT     0A0H.2
+  0090                91     P20     BIT     090H.0
+  0089                92     P11     BIT     088H.1
+  0082                93     P02     BIT     080H.2
+  00A3                94     EIN12_INT_F     BIT     0A0H.3
+  0091                95     P21     BIT     090H.1
+  008A                96     P12     BIT     088H.2
+  0083                97     P03     BIT     080H.3
+  0092                98     P22     BIT     090H.2
+  008B                99     P13     BIT     088H.3
+  0084               100     P04     BIT     080H.4
+  00B4               101     P0FSRH  DATA    0B4H
+  0093               102     P23     BIT     090H.3
+  008C               103     P14     BIT     088H.4
+  0085               104     P05     BIT     080H.5
+  00B6               105     P1FSRH  DATA    0B6H
+  008D               106     P15     BIT     088H.5
+  0086               107     P06     BIT     080H.6
+  0087               108     P07     BIT     080H.7
+  009A               109     ILVL    DATA    09AH
+  00B3               110     P0FSRL  DATA    0B3H
+  00B5               111     P1FSRL  DATA    0B5H
+  00B0               112     ADC_INT_F       BIT     0B0H.0
+  00A9               113     UART_RX_INT_F   BIT     0A8H.1
+  00DE               114     CMPDBT  DATA    0DEH
+  00FB               115     I2CSCLHR        DATA    0FBH
+  00E1               116     UCTRL1  DATA    0E1H
+  00AA               117     UART_TX_INT_F   BIT     0A8H.2
+  00E2               118     UCTRL2  DATA    0E2H
+  0098               119     RSFR    DATA    098H
+  0089               120     LVIR    DATA    089H
+  00E3               121     UCTRL3  DATA    0E3H
+  00C0               122     IE1     DATA    0C0H
+  00EB               123     UCTRL4  DATA    0EBH
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE     3
+
+  00C8               124     IE2     DATA    0C8H
+  00FA               125     I2CSCLLR        DATA    0FAH
+  00F0               126     B       DATA    0F0H
+  00D1               127     TEST    DATA    0D1H
+  008E               128     WDTR    DATA    08EH
+  00C4               129     T0_INT_EN       BIT     0C0H.4
+  00C5               130     T1_INT_EN       BIT     0C0H.5
+  00C6               131     T2_INT_EN       BIT     0C0H.6
+  0085               132     BITCNT  DATA    085H
+  00E0               133     ACC     DATA    0E0H
+  0096               134     ADCM1   DATA    096H
+  00E9               135     IP1     DATA    0E9H
+  00EA               136     IP2     DATA    0EAH
+  00D0               137     P       BIT     0D0H.0
+  00B2               138     BIT_INT_F       BIT     0B0H.2
+  00B9               139     EINT10_INT_EN   BIT     0B8H.1
+  00A0               140     CMP_INT_F       BIT     0A0H.0
+  00BA               141     EINT11_INT_EN   BIT     0B8H.2
+  00FD               142     I2CDR   DATA    0FDH
+  00D3               143     RS0     BIT     0D0H.3
+  00BB               144     EINT12_INT_EN   BIT     0B8H.3
+  008F               145     SYSCON_AR       DATA    08FH
+  00D4               146     RS1     BIT     0D0H.4
+  00FF               147     I2CSAR1 DATA    0FFH
+  0083               148     DPH     DATA    083H
+  00BC               149     T1ADR   DATA    0BCH
+  00F9               150     I2CMR   DATA    0F9H
+  00C4               151     T2ADR   DATA    0C4H
+  00BE               152     T1BDR   DATA    0BEH
+  00B3               153     LVI_INT_F       BIT     0B0H.3
+  0094               154     T0CDR   DATA    094H
+  00CC               155     T1CDR   DATA    0CCH
+  00C6               156     T2BDR   DATA    0C6H
+  00CE               157     T1DDR   DATA    0CEH
+  0082               158     DPL     DATA    082H
+  00B1               159     WDT_INT_F       BIT     0B0H.1
+  00BB               160     T1CRH   DATA    0BBH
+  0097               161     ADCRH   DATA    097H
+  00F8               162     I2CSR   DATA    0F8H
+  00C3               163     T2CRH   DATA    0C3H
+  00F7               164     FEARH   DATA    0F7H
+  00BA               165     T1CRL   DATA    0BAH
+  0096               166     ADCRL   DATA    096H
+  00C2               167     T2CRL   DATA    0C2H
+  00B2               168     CMX     DATA    0B2H
+  00D4               169     DMY_REFA        DATA    0D4H
+  0093               170     T0CNT   DATA    093H
+  00F5               171     FEARL   DATA    0F5H
+  00D5               172     DMY_REFB        DATA    0D5H
+  0082               173     DPTR0   DATA    082H
+  00F6               174     FEARM   DATA    0F6H
+  00B3               175     P0FSR   DATA    0B3H
+  0082               176     DPTR1   DATA    082H
+  00B5               177     P1FSR   DATA    0B5H
+  00B7               178     P2FSR   DATA    0B7H
+  00E6               179     UDATA   DATA    0E6H
+  00FC               180     I2CSDHR DATA    0FCH
+  00BC               181     EINT_INT_EN     BIT     0B8H.4
+  00E5               182     UBAUD   DATA    0E5H
+  00F4               183     FETCR   DATA    0F4H
+  00DF               184     XBANK   DATA    0DFH
+  00D5               185     F0      BIT     0D0H.5
+  00AA               186     LDOCR   DATA    0AAH
+  0086               187     BITCR   DATA    086H
+  00D6               188     CMPCR   DATA    0D6H
+  00D1               189     F1      BIT     0D0H.1
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE     4
+
+  00AC               190     T0_INT_F        BIT     0A8H.4
+  00AD               191     T1_INT_F        BIT     0A8H.5
+  00AE               192     T2_INT_F        BIT     0A8H.6
+  00D0               193     PSW     DATA    0D0H
+  00D8               194     OSCCR   DATA    0D8H
+                     195     ?PR?write_page_buffer_src?FLASH          SEGMENT CODE 
+                     196     ?PR?do_flash_at_sram_src?FLASH           SEGMENT CODE 
+                     197     ?PR?Flash_Enter?FLASH                    SEGMENT CODE 
+                     198     ?PR?Flash_Exit?FLASH SEGMENT CODE 
+                     199     ?PR?_write_page_buffer?FLASH             SEGMENT CODE 
+                     200     ?XD?_write_page_buffer?FLASH             SEGMENT XDATA OVERLAYABLE 
+                     201     ?PR?do_flash_at_sram?FLASH               SEGMENT CODE 
+                     202     ?XD?do_flash_at_sram?FLASH               SEGMENT XDATA OVERLAYABLE 
+                     203     ?PR?_Flash_Erase?FLASH                   SEGMENT CODE 
+                     204     ?XD?_Flash_Erase?FLASH                   SEGMENT XDATA OVERLAYABLE 
+                     205     ?PR?_Flash_Write?FLASH                   SEGMENT CODE 
+                     206     ?XD?_Flash_Write?FLASH                   SEGMENT XDATA OVERLAYABLE 
+                     207     ?PR?_Flash_Read?FLASH                    SEGMENT CODE 
+                     208     ?XD?_Flash_Read?FLASH                    SEGMENT XDATA OVERLAYABLE 
+                     209     ?DT?FLASH            SEGMENT DATA 
+                     210             EXTRN   CODE (?C?CLDPTR)
+                     211             EXTRN   CODE (?C?CSTPTR)
+                     212             PUBLIC  g_FEMR
+                     213             PUBLIC  g_FECR
+                     214             PUBLIC  g_WDTMR
+                     215             PUBLIC  g_IE
+                     216             PUBLIC  code_buf
+                     217             PUBLIC  g_IE2
+                     218             PUBLIC  g_IE1
+                     219             PUBLIC  ?_Flash_Read?BYTE
+                     220             PUBLIC  _Flash_Read
+                     221             PUBLIC  _Flash_Write
+                     222             PUBLIC  _Flash_Erase
+                     223             PUBLIC  do_flash_at_sram
+                     224             PUBLIC  _write_page_buffer
+                     225             PUBLIC  Flash_Exit
+                     226             PUBLIC  Flash_Enter
+                     227             PUBLIC  do_flash_at_sram_src
+                     228             PUBLIC  write_page_buffer_src
+                     229     
+----                 230             DSEG  AT  030H
+0030                 231            code_buf:   DS   20
+                     232     
+----                 233             RSEG  ?XD?_write_page_buffer?FLASH
+0000                 234     ?_write_page_buffer?BYTE:
+0000                 235            temp?441:   DS   3
+                     236     
+----                 237             RSEG  ?XD?do_flash_at_sram?FLASH
+0000                 238     ?do_flash_at_sram?BYTE:
+0000                 239            temp?543:   DS   1
+                     240     
+----                 241             RSEG  ?XD?_Flash_Erase?FLASH
+0000                 242     ?_Flash_Erase?BYTE:
+0000                 243            addr?645:   DS   2
+                     244     
+----                 245             RSEG  ?XD?_Flash_Read?FLASH
+0000                 246     ?_Flash_Read?BYTE:
+0000                 247            addr?853:   DS   2
+0002                 248              dt?854:   DS   3
+0005                 249             ORG  5
+0005                 250          length?855:   DS   1
+0006                 251             ORG  6
+0006                 252               i?856:   DS   2
+                     253     
+----                 254             RSEG  ?XD?_Flash_Write?FLASH
+0000                 255     ?_Flash_Write?BYTE:
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE     5
+
+0000                 256            addr?748:   DS   2
+0002                 257             ORG  2
+0002                 258              dt?749:   DS   3
+0005                 259             ORG  5
+0005                 260               i?750:   DS   2
+0007                 261             ORG  7
+0007                 262     flash_state_id?752:   DS   1
+                     263     
+----                 264             RSEG  ?DT?FLASH
+0000                 265               g_IE1:   DS   1
+0001                 266               g_IE2:   DS   1
+0002                 267                g_IE:   DS   1
+0003                 268             g_WDTMR:   DS   1
+0004                 269              g_FECR:   DS   1
+0005                 270              g_FEMR:   DS   1
+                     271     ; #define FLASH_GLOBALS
+                     272     ; 
+                     273     ; #define               MyDef   extern
+                     274     ; 
+                     275     ; 
+                     276     ; #include      "A94B114.h"
+                     277     ; #include "flash.h"
+                     278     ; #include      "func_def.h"
+                     279     ; 
+                     280     ; #define PGM_TIME 0x9D // 2.5ms
+                     281     ; #define NOP _nop_()
+                     282     ; 
+                     283     ; #define PAGEBUF_SIZE 32
+                     284     ; #define coderom ((unsigned char volatile code  *) 0)
+                     285     ; #define DUMMY_FLASH_ADDRESS   0x600                   // Set a dummy write area within th
+                             e protection zone.
+                     286     ; 
+                     287     ; #define       FLASH_WRITE_SECURITY_ID         0xF0
+                     288     ; #define       FLASH_ERASE_SECURITY_ID         0xE0
+                     289     ; 
+                     290     ; // Do not change this define.
+                     291     ; // code_buf, g_FEMR, g_FECR, g_WDTMR must be data area. (Do not define at xdata area or i
+                             data.)
+                     292     ; volatile unsigned char data code_buf[20] _at_ 0x30;           // Lower 128bytes internal 
+                             RAM. (GPR Address 0x30~0x7F)
+                     293     ; volatile unsigned char data g_FEMR, g_FECR, g_WDTMR;
+                     294     ; volatile unsigned char data g_IE, g_IE1, g_IE2;
+                     295     ; //==============================================================================
+                     296     ; // Sram-jump Program Routine.
+                     297     ; //==============================================================================
+                     298     ; // must execute in SRAM!, 0 ~ 0x11(code size : 18 byte)
+                     299     ; // Do not change this routine.
+                     300     ; volatile void write_page_buffer_src()         
+                     301     
+----                 302             RSEG  ?PR?write_page_buffer_src?FLASH
+0000                 303     write_page_buffer_src:
+                     304             USING   0
+                     305                             ; SOURCE LINE # 30
+                     306     ; {
+                     307                             ; SOURCE LINE # 31
+                     308     ;     FEMR = FLASH_SEL                |   // FSEL (Select Flash memory)
+                     309                             ; SOURCE LINE # 32
+0000 75F189          310             MOV     FEMR,#089H
+                     311     ;            FLASH_PBUFF_SEL          |   // PBUFF (Select page buffer)
+                     312     ;            FLASH_CON_ENABLE         ;   // FEEN (Enable program & erase)
+                     313     ; 
+                     314     ;       #pragma asm
+                     315     ;               mov             r0,#32
+0003 7820            316               mov           r0,#32
+                     317     ;               mov             dptr,#0x10E0    ; page buffer address
+0005 9010E0          318               mov           dptr,#0x10E0    ; page buffer address
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE     6
+
+                     319     ;     write_page_buffer_src_loop:
+0008                 320               write_page_buffer_src_loop:
+                     321     ;               mov             a, @r1
+0008 E7              322               mov           a, @r1
+                     323     ;               movx    @dptr,a
+0009 F0              324               movx  @dptr,a
+                     325     ;               inc             r1
+000A 09              326               inc           r1
+                     327     ;               inc             dptr        
+000B A3              328               inc           dptr        
+                     329     ;               djnz    r0,write_page_buffer_src_loop
+000C D8FA            330               djnz  r0,write_page_buffer_src_loop
+                     331     ;       #pragma endasm
+                     332     ; 
+                     333     ;     FEMR = 0;
+                     334                             ; SOURCE LINE # 47
+000E E4              335             CLR     A
+000F F5F1            336             MOV     FEMR,A
+                     337     ; }
+                     338                             ; SOURCE LINE # 48
+0011 22              339             RET     
+                     340     ; END OF write_page_buffer_src
+                     341     
+                     342     ; 
+                     343     ; // must execute in SRAM!, 0 ~ 0x0E(code size : 15 byte)
+                     344     ; // Do not change this routine.
+                     345     ; volatile void do_flash_at_sram_src()          
+                     346     
+----                 347             RSEG  ?PR?do_flash_at_sram_src?FLASH
+0000                 348     do_flash_at_sram_src:
+                     349             USING   0
+                     350                             ; SOURCE LINE # 52
+                     351     ; {
+                     352                             ; SOURCE LINE # 53
+                     353     ;       #pragma asm
+                     354     ;               mov     FEMR,g_FEMR                             // 3 byte
+0000 8500F1   F      355               mov   FEMR,g_FEMR                              
+                     356     ;               mov     FECR,g_FECR                             // 3 byte
+0003 8500F2   F      357               mov   FECR,g_FECR                              
+                     358     ;       _flash_busy_wait:
+0006                 359               _flash_busy_wait:
+                     360     ;               mov     A,FESR                                  // 2 byte
+0006 E5F3            361               mov   A,FESR                                   
+                     362     ;               JNB     ACC.7,_flash_busy_wait  // 3 byte
+0008 30E7FB          363               JNB   ACC.7,_flash_busy_wait   
+                     364     ;               clr     A                                               // 1 byte
+000B E4              365               clr   A                                                
+                     366     ;               mov     FEMR,A                                  // 2 byte
+000C F5F1            367               mov   FEMR,A                                   
+                     368     ;       #pragma endasm
+                     369     ; // C source
+                     370     ; //     FEMR = g_FEMR;
+                     371     ; //     FECR = g_FECR;
+                     372     ; //     while( !(FESR & 0x80) );
+                     373     ; //     FEMR = 0;
+                     374     ; }     // RET // 1byte
+                     375                             ; SOURCE LINE # 68
+000E 22              376             RET     
+                     377     ; END OF do_flash_at_sram_src
+                     378     
+                     379     ; //==============================================================================
+                     380     ; void Flash_Enter()
+                     381     
+----                 382             RSEG  ?PR?Flash_Enter?FLASH
+0000                 383     Flash_Enter:
+                     384                             ; SOURCE LINE # 70
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE     7
+
+                     385     ; {
+                     386                             ; SOURCE LINE # 71
+                     387     ;       cli();                          // Global Interrupt Disable
+                     388                             ; SOURCE LINE # 72
+0000 C2BF            389             CLR     EA
+                     390     ;       g_IE = IE;
+                     391                             ; SOURCE LINE # 73
+0002 85B800   F      392             MOV     g_IE,IE
+                     393     ;       g_IE1 = IE1;
+                     394                             ; SOURCE LINE # 74
+0005 85C000   F      395             MOV     g_IE1,IE1
+                     396     ;       g_IE2 = IE2; 
+                     397                             ; SOURCE LINE # 75
+0008 85C800   F      398             MOV     g_IE2,IE2
+                     399     ;       g_WDTMR = WDTMR;        // Backup WDTMR
+                     400                             ; SOURCE LINE # 76
+000B 858D00   F      401             MOV     g_WDTMR,WDTMR
+                     402     ;       WDTMR   = 0;            // Watch Dog Timer Stop.
+                     403                             ; SOURCE LINE # 77
+000E E4              404             CLR     A
+000F F58D            405             MOV     WDTMR,A
+                     406     ;       g_WDTMR |= 0x04;        // Clear WDT Counter
+                     407                             ; SOURCE LINE # 78
+0011 430004   F      408             ORL     g_WDTMR,#04H
+                     409     ;       
+                     410     ;       // To access Flash Control register, ENTRY_0~2 should be set 0xAA, 0x55, 0xA5.
+                     411     ;       *(unsigned char xdata *)0x10D8 = 0xAA;
+                     412                             ; SOURCE LINE # 81
+0014 9010D8          413             MOV     DPTR,#010D8H
+0017 74AA            414             MOV     A,#0AAH
+0019 F0              415             MOVX    @DPTR,A
+                     416     ;     *(unsigned char xdata *)0x10DA = 0x55;
+                     417                             ; SOURCE LINE # 82
+001A 9010DA          418             MOV     DPTR,#010DAH
+001D 7455            419             MOV     A,#055H
+001F F0              420             MOVX    @DPTR,A
+                     421     ;     *(unsigned char xdata *)0x10DD = 0xA5;
+                     422                             ; SOURCE LINE # 83
+0020 9010DD          423             MOV     DPTR,#010DDH
+0023 74A5            424             MOV     A,#0A5H
+0025 F0              425             MOVX    @DPTR,A
+                     426     ;       
+                     427     ;       FEARL = (unsigned char)( DUMMY_FLASH_ADDRESS & 0xff);
+                     428                             ; SOURCE LINE # 85
+0026 E4              429             CLR     A
+0027 F5F5            430             MOV     FEARL,A
+                     431     ;       FEARM = (unsigned char)(( DUMMY_FLASH_ADDRESS >> 8) & 0xff);
+                     432                             ; SOURCE LINE # 86
+0029 75F606          433             MOV     FEARM,#06H
+                     434     ;       FEARH = 0;
+                     435                             ; SOURCE LINE # 87
+002C F5F7            436             MOV     FEARH,A
+                     437     ;       
+                     438     ; }
+                     439                             ; SOURCE LINE # 89
+002E 22              440             RET     
+                     441     ; END OF Flash_Enter
+                     442     
+                     443     ; 
+                     444     ; void Flash_Exit()
+                     445     
+----                 446             RSEG  ?PR?Flash_Exit?FLASH
+0000                 447     Flash_Exit:
+                     448             USING   0
+                     449                             ; SOURCE LINE # 91
+                     450     ; {
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE     8
+
+                     451                             ; SOURCE LINE # 92
+                     452     ;       FECR = FLASH_MODE_EXIT;
+                     453                             ; SOURCE LINE # 93
+0000 75F233          454             MOV     FECR,#033H
+                     455     ;       
+                     456     ;       FEARL = (unsigned char)( DUMMY_FLASH_ADDRESS & 0xff);
+                     457                             ; SOURCE LINE # 95
+0003 E4              458             CLR     A
+0004 F5F5            459             MOV     FEARL,A
+                     460     ;       FEARM = (unsigned char)(( DUMMY_FLASH_ADDRESS >> 8) & 0xff);
+                     461                             ; SOURCE LINE # 96
+0006 75F606          462             MOV     FEARM,#06H
+                     463     ;       FEARH = 0;
+                     464                             ; SOURCE LINE # 97
+0009 F5F7            465             MOV     FEARH,A
+                     466     ;       
+                     467     ;       // After to change Flash Control register, ENTRY_0~2 should be set 0x00.
+                     468     ;       *(unsigned char xdata *)0x10D8 = 0x00;
+                     469                             ; SOURCE LINE # 100
+000B 9010D8          470             MOV     DPTR,#010D8H
+000E F0              471             MOVX    @DPTR,A
+                     472     ;     *(unsigned char xdata *)0x10DA = 0x00;
+                     473                             ; SOURCE LINE # 101
+000F 9010DA          474             MOV     DPTR,#010DAH
+0012 F0              475             MOVX    @DPTR,A
+                     476     ;     *(unsigned char xdata *)0x10DD = 0x00;
+                     477                             ; SOURCE LINE # 102
+0013 9010DD          478             MOV     DPTR,#010DDH
+0016 F0              479             MOVX    @DPTR,A
+                     480     ;       
+                     481     ;       // Flash code buffer ram clear.
+                     482     ; #pragma asm
+                     483     ;       mov             r0, #code_buf
+0017 7830            484               mov           r0, #code_buf
+                     485     ;       mov             r2, #20
+0019 7A14            486               mov           r2, #20
+                     487     ;       clr             a
+001B E4              488               clr           a
+                     489     ; loop0:
+001C                 490               loop0:
+                     491     ;       mov             @r0, a
+001C F6              492               mov           @r0, a
+                     493     ;       inc             r0
+001D 08              494               inc           r0
+                     495     ;       djnz    r2, loop0
+001E DAFC            496               djnz  r2, loop0
+                     497     ; #pragma endasm
+                     498     ; 
+                     499     ;       WDTMR   = g_WDTMR;      // Restore WDTMR
+                     500                             ; SOURCE LINE # 115
+0020 85008D   F      501             MOV     WDTMR,g_WDTMR
+                     502     ;        IE = g_IE;
+                     503                             ; SOURCE LINE # 116
+0023 8500B8   F      504             MOV     IE,g_IE
+                     505     ;       IE1 = g_IE1;
+                     506                             ; SOURCE LINE # 117
+0026 8500C0   F      507             MOV     IE1,g_IE1
+                     508     ;       IE2 = g_IE2; 
+                     509                             ; SOURCE LINE # 118
+0029 8500C8   F      510             MOV     IE2,g_IE2
+                     511     ;       sei();                          // Global Interrupt Enable
+                     512                             ; SOURCE LINE # 119
+002C D2BF            513             SETB    EA
+                     514     ; }
+                     515                             ; SOURCE LINE # 120
+002E 22              516             RET     
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE     9
+
+                     517     ; END OF Flash_Exit
+                     518     
+                     519     ; 
+                     520     ; 
+                     521     ; void write_page_buffer(unsigned char *dt)     // dt -> r3, r2, r1     
+                     522     
+----                 523             RSEG  ?PR?_write_page_buffer?FLASH
+0000                 524     _write_page_buffer:
+                     525             USING   0
+                     526                             ; SOURCE LINE # 123
+                     527     ;---- Variable 'dt?440' assigned to Register 'R1/R2/R3' ----
+                     528     ; {
+                     529                             ; SOURCE LINE # 124
+                     530     ;       unsigned char *temp = dt;
+                     531                             ; SOURCE LINE # 125
+0000 900000   F      532             MOV     DPTR,#temp?441
+0003 EB              533             MOV     A,R3
+0004 F0              534             MOVX    @DPTR,A
+0005 A3              535             INC     DPTR
+0006 EA              536             MOV     A,R2
+0007 F0              537             MOVX    @DPTR,A
+0008 A3              538             INC     DPTR
+0009 E9              539             MOV     A,R1
+000A F0              540             MOVX    @DPTR,A
+                     541     ;       
+                     542     ;     #pragma asm
+                     543     ;               mov             dptr,#write_page_buffer_src
+000B 900000   F      544               mov           dptr,#write_page_buffer_src
+                     545     ;               mov             r0,#0x30
+000E 7830            546               mov           r0,#0x30
+                     547     ;         mov           r2,#0x12
+0010 7A12            548               mov           r2,#0x12
+                     549     ;       write_page_buffer_loop:
+0012                 550               write_page_buffer_loop:
+                     551     ;               clr             a
+0012 E4              552               clr           a
+                     553     ;               movc    a,@a+dptr
+0013 93              554               movc  a,@a+dptr
+                     555     ;               mov             @r0,a
+0014 F6              556               mov           @r0,a
+                     557     ;               inc             dptr
+0015 A3              558               inc           dptr
+                     559     ;               inc             r0
+0016 08              560               inc           r0
+                     561     ;               djnz    r2,write_page_buffer_loop
+0017 DAF9            562               djnz  r2,write_page_buffer_loop
+                     563     ;         ljmp  0x8030          ; jump sram region
+0019 028030          564               ljmp  0x8030          ; jump sram region
+                     565     ;     #pragma endasm
+                     566     ; }
+                     567                             ; SOURCE LINE # 140
+001C 22              568             RET     
+                     569     ; END OF _write_page_buffer
+                     570     
+                     571     ; 
+                     572     ; #if 0
+                     573     ; void do_flash_at_sram()
+                     574     ; {
+                     575     ;     #pragma asm
+                     576     ;               mov             dptr,#do_flash_at_sram_src
+                     577     ;               mov             r0,#0x30
+                     578     ;               mov             r1,#0x0F
+                     579     ;       do_flash_at_sram_loop:
+                     580     ;               clr             a
+                     581     ;               movc    a,@a+dptr
+                     582     ;               mov             @r0,a
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE    10
+
+                     583     ;               inc             dptr
+                     584     ;               inc             r0
+                     585     ;               djnz    r1,do_flash_at_sram_loop
+                     586     ;               ljmp    0x8030
+                     587     ;     #pragma endasm
+                     588     ; }
+                     589     ; #else
+                     590     ; void do_flash_at_sram()
+                     591     
+----                 592             RSEG  ?PR?do_flash_at_sram?FLASH
+0000                 593     do_flash_at_sram:
+                     594             USING   0
+                     595                             ; SOURCE LINE # 160
+                     596     ; {
+                     597                             ; SOURCE LINE # 161
+                     598     ;       unsigned char code *ptr;                //need to add "code"
+                     599     ;       unsigned char temp=0, i;
+                     600                             ; SOURCE LINE # 163
+0000 E4              601             CLR     A
+0001 900000   F      602             MOV     DPTR,#temp?543
+0004 F0              603             MOVX    @DPTR,A
+                     604     ; 
+                     605     ;       ptr=(unsigned char code*)do_flash_at_sram_src;
+                     606                             ; SOURCE LINE # 165
+0005 7E00     F      607             MOV     R6,#HIGH (do_flash_at_sram_src)
+0007 7F00     F      608             MOV     R7,#LOW (do_flash_at_sram_src)
+                     609     ;---- Variable 'ptr?542' assigned to Register 'R6/R7' ----
+                     610     ;       //temp=sizeof(int);
+                     611     ;       for(i=0; i<15;i++)      //**size of "do_flash_at_sram_src" is less than 32.
+                     612                             ; SOURCE LINE # 167
+                     613     ;---- Variable 'i?544' assigned to Register 'R5' ----
+0009 FD              614             MOV     R5,A
+000A                 615     ?C0006:
+000A ED              616             MOV     A,R5
+000B C3              617             CLR     C
+000C 940F            618             SUBB    A,#0FH
+000E 7480            619             MOV     A,#080H
+0010 9480            620             SUBB    A,#080H
+0012 5014            621             JNC     ?C0007
+                     622     ;       {
+                     623                             ; SOURCE LINE # 168
+                     624     ;               code_buf[i]=ptr[i];
+                     625                             ; SOURCE LINE # 169
+0014 EF              626             MOV     A,R7
+0015 2D              627             ADD     A,R5
+0016 F582            628             MOV     DPL,A
+0018 E4              629             CLR     A
+0019 3E              630             ADDC    A,R6
+001A F583            631             MOV     DPH,A
+001C E4              632             CLR     A
+001D 93              633             MOVC    A,@A+DPTR
+001E FC              634             MOV     R4,A
+001F 7430            635             MOV     A,#LOW (code_buf)
+0021 2D              636             ADD     A,R5
+0022 F8              637             MOV     R0,A
+0023 A604            638             MOV     @R0,AR4
+                     639     ;       }
+                     640                             ; SOURCE LINE # 170
+0025 0D              641             INC     R5
+0026 80E2            642             SJMP    ?C0006
+0028                 643     ?C0007:
+                     644     ; //    ljmp_code_buf();                //Jump 0x8030
+                     645     ;       #pragma asm
+                     646     ;               ljmp    0x8030          ;FLASH Writing Start
+0028 028030          647               ljmp  0x8030          ;FLASH Writing Start
+                     648     ;       #pragma endasm
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE    11
+
+                     649     ;       
+                     650     ; }
+                     651                             ; SOURCE LINE # 176
+002B 22              652             RET     
+                     653     ; END OF do_flash_at_sram
+                     654     
+                     655     ; #endif
+                     656     ; char Flash_Erase(unsigned int addr)
+                     657     
+----                 658             RSEG  ?PR?_Flash_Erase?FLASH
+0000                 659     _Flash_Erase:
+                     660             USING   0
+                     661                             ; SOURCE LINE # 178
+0000 900000   F      662             MOV     DPTR,#addr?645
+0003 EE              663             MOV     A,R6
+0004 F0              664             MOVX    @DPTR,A
+0005 A3              665             INC     DPTR
+0006 EF              666             MOV     A,R7
+0007 F0              667             MOVX    @DPTR,A
+                     668     ; {
+                     669                             ; SOURCE LINE # 179
+                     670     ;       unsigned int i;
+                     671     ;       unsigned char flash_state_id = FLASH_ERASE_SECURITY_ID;
+                     672                             ; SOURCE LINE # 181
+                     673     ;---- Variable 'flash_state_id?647' assigned to Register 'R5' ----
+0008 7DE0            674             MOV     R5,#0E0H
+                     675     ;       
+                     676     ;       // Flash Flash Control Register CLR change before initialization.
+                     677     ;       FECR    = 0;
+                     678                             ; SOURCE LINE # 184
+000A E4              679             CLR     A
+000B F5F2            680             MOV     FECR,A
+                     681     ;       FETCR   = 0;
+                     682                             ; SOURCE LINE # 185
+000D F5F4            683             MOV     FETCR,A
+                     684     ;       FEMR    = 0; 
+                     685                             ; SOURCE LINE # 186
+000F F5F1            686             MOV     FEMR,A
+                     687     ;       
+                     688     ;       // Enable program mode
+                     689     ;       Flash_Enter();
+                     690                             ; SOURCE LINE # 189
+0011 120000   F      691             LCALL   Flash_Enter
+                     692     ; 
+                     693     ;       FETCR = PGM_TIME;                               // 0x9D = 157 : (157+1) * 2 (31.25n
+                             s * 256) = 2.528ms
+                     694                             ; SOURCE LINE # 191
+0014 75F49D          695             MOV     FETCR,#09DH
+                     696     ;       FECR = FLASH_PBUFF_RESET;
+                     697                             ; SOURCE LINE # 192
+0017 75F202          698             MOV     FECR,#02H
+                     699     ; 
+                     700     ;       g_FEMR = FLASH_SEL                              |
+                     701                             ; SOURCE LINE # 194
+001A 750091   F      702             MOV     g_FEMR,#091H
+                     703     ;                  FLASH_ERASE_MODE             |
+                     704     ;                  FLASH_CON_ENABLE             ;
+                     705     ; 
+                     706     ;       g_FECR = FLASH_START_ERASE_PGM  ;
+                     707                             ; SOURCE LINE # 198
+001D 75000B   F      708             MOV     g_FECR,#0BH
+                     709     ;       
+                     710     ;       FEARL = (unsigned char)(addr&0xff);
+                     711                             ; SOURCE LINE # 200
+0020 900000   F      712             MOV     DPTR,#addr?645
+0023 E0              713             MOVX    A,@DPTR
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE    12
+
+0024 A3              714             INC     DPTR
+0025 E0              715             MOVX    A,@DPTR
+0026 F5F5            716             MOV     FEARL,A
+                     717     ;       FEARM = (unsigned char)((addr>>8)&0xff);
+                     718                             ; SOURCE LINE # 201
+0028 900000   F      719             MOV     DPTR,#addr?645
+002B E0              720             MOVX    A,@DPTR
+002C F5F6            721             MOV     FEARM,A
+                     722     ;       FEARH = 0;
+                     723                             ; SOURCE LINE # 202
+002E E4              724             CLR     A
+002F F5F7            725             MOV     FEARH,A
+                     726     ;       
+                     727     ;       if(flash_state_id != FLASH_ERASE_SECURITY_ID)
+                     728                             ; SOURCE LINE # 204
+0031 74E0            729             MOV     A,#0E0H
+0033 64E0            730             XRL     A,#0E0H
+0035 6009            731             JZ      ?C0010
+                     732     ;       {
+                     733                             ; SOURCE LINE # 205
+                     734     ;               Flash_Exit();
+                     735                             ; SOURCE LINE # 206
+0037 120000   F      736             LCALL   Flash_Exit
+                     737     ;               WDTMR = 0;                      // If Flash ID fail, may be WDTMR value err
+                             or.
+                     738                             ; SOURCE LINE # 207
+003A E4              739             CLR     A
+003B F58D            740             MOV     WDTMR,A
+                     741     ;               
+                     742     ;               return -1;
+                     743                             ; SOURCE LINE # 209
+003D 7FFF            744             MOV     R7,#0FFH
+003F 22              745             RET     
+                     746     ;       }
+                     747                             ; SOURCE LINE # 210
+0040                 748     ?C0010:
+                     749     ;       
+                     750     ;       do_flash_at_sram();
+                     751                             ; SOURCE LINE # 212
+0040 120000   F      752             LCALL   do_flash_at_sram
+                     753     ;  
+                     754     ;       Flash_Exit();
+                     755                             ; SOURCE LINE # 214
+0043 120000   F      756             LCALL   Flash_Exit
+                     757     ;       
+                     758     ;       // read data  
+                     759     ;       for(i=0; i<PAGEBUF_SIZE;i++){   // Read flash data.
+                     760                             ; SOURCE LINE # 217
+                     761     ;---- Variable 'i?646' assigned to Register 'R4/R5' ----
+0046 E4              762             CLR     A
+0047 FD              763             MOV     R5,A
+0048 FC              764             MOV     R4,A
+0049                 765     ?C0012:
+0049 C3              766             CLR     C
+004A ED              767             MOV     A,R5
+004B 9420            768             SUBB    A,#020H
+004D EC              769             MOV     A,R4
+004E 9400            770             SUBB    A,#00H
+0050 5027            771             JNC     ?C0013
+                     772     ;               if(coderom[addr] != 0x00) 
+                     773                             ; SOURCE LINE # 218
+0052 900000   F      774             MOV     DPTR,#addr?645
+0055 E0              775             MOVX    A,@DPTR
+0056 FE              776             MOV     R6,A
+0057 A3              777             INC     DPTR
+0058 E0              778             MOVX    A,@DPTR
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE    13
+
+0059 F582            779             MOV     DPL,A
+005B 8E83            780             MOV     DPH,R6
+005D E4              781             CLR     A
+005E 93              782             MOVC    A,@A+DPTR
+005F 6003            783             JZ      ?C0015
+                     784     ;                       return -1;
+                     785                             ; SOURCE LINE # 219
+0061 7FFF            786             MOV     R7,#0FFH
+0063 22              787             RET     
+0064                 788     ?C0015:
+                     789     ; 
+                     790     ;               addr++;
+                     791                             ; SOURCE LINE # 221
+0064 900000   F      792             MOV     DPTR,#addr?645+01H
+0067 E0              793             MOVX    A,@DPTR
+0068 04              794             INC     A
+0069 F0              795             MOVX    @DPTR,A
+006A 7006            796             JNZ     ?C0026
+006C 900000   F      797             MOV     DPTR,#addr?645
+006F E0              798             MOVX    A,@DPTR
+0070 04              799             INC     A
+0071 F0              800             MOVX    @DPTR,A
+0072                 801     ?C0026:
+                     802     ;       }
+                     803                             ; SOURCE LINE # 222
+0072 0D              804             INC     R5
+0073 ED              805             MOV     A,R5
+0074 7001            806             JNZ     ?C0027
+0076 0C              807             INC     R4
+0077                 808     ?C0027:
+0077 80D0            809             SJMP    ?C0012
+0079                 810     ?C0013:
+                     811     ;       return 0;
+                     812                             ; SOURCE LINE # 223
+0079 7F00            813             MOV     R7,#00H
+                     814     ; }
+                     815                             ; SOURCE LINE # 224
+007B                 816     ?C0011:
+007B 22              817             RET     
+                     818     ; END OF _Flash_Erase
+                     819     
+                     820     ; 
+                     821     ; char Flash_Write(unsigned int addr, unsigned char *dt)
+                     822     
+----                 823             RSEG  ?PR?_Flash_Write?FLASH
+0000                 824     _Flash_Write:
+                     825             USING   0
+                     826                             ; SOURCE LINE # 226
+0000 900000   F      827             MOV     DPTR,#addr?748
+0003 EE              828             MOV     A,R6
+0004 F0              829             MOVX    @DPTR,A
+0005 A3              830             INC     DPTR
+0006 EF              831             MOV     A,R7
+0007 F0              832             MOVX    @DPTR,A
+0008 A3              833             INC     DPTR
+0009 EB              834             MOV     A,R3
+000A F0              835             MOVX    @DPTR,A
+000B A3              836             INC     DPTR
+000C EA              837             MOV     A,R2
+000D F0              838             MOVX    @DPTR,A
+000E A3              839             INC     DPTR
+000F E9              840             MOV     A,R1
+0010 F0              841             MOVX    @DPTR,A
+                     842     ; {
+                     843                             ; SOURCE LINE # 227
+                     844     ;       unsigned int i;
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE    14
+
+                     845     ;       unsigned char *pdt;
+                     846     ;       unsigned char flash_state_id = FLASH_WRITE_SECURITY_ID;
+                     847                             ; SOURCE LINE # 230
+0011 900000   F      848             MOV     DPTR,#flash_state_id?752
+0014 74F0            849             MOV     A,#0F0H
+0016 F0              850             MOVX    @DPTR,A
+                     851     ;       
+                     852     ;       // Enable program mode
+                     853     ;       Flash_Enter();
+                     854                             ; SOURCE LINE # 233
+0017 120000   F      855             LCALL   Flash_Enter
+                     856     ;       
+                     857     ;       FETCR = PGM_TIME;                               // 0x9D = 157 : (157+1) * 2 (31.25n
+                             s * 256) = 2.528ms
+                     858                             ; SOURCE LINE # 235
+001A 75F49D          859             MOV     FETCR,#09DH
+                     860     ; 
+                     861     ;     // 0x81
+                     862     ;     FEMR = FLASH_SEL                | // FSEL (Select Flash memory)
+                     863                             ; SOURCE LINE # 238
+001D 75F181          864             MOV     FEMR,#081H
+                     865     ;            FLASH_CON_ENABLE         ; // FEEN (Enable program & erase of Flash)
+                     866     ; 
+                     867     ;     // 
+                     868     ;     FECR = FLASH_PBUFF_RESET        ; // PBRSTB (Reset page buffer)
+                     869                             ; SOURCE LINE # 242
+0020 75F202          870             MOV     FECR,#02H
+                     871     ; 
+                     872     ;       FEARL = (unsigned char)(addr&0xff);
+                     873                             ; SOURCE LINE # 244
+0023 900000   F      874             MOV     DPTR,#addr?748
+0026 E0              875             MOVX    A,@DPTR
+0027 A3              876             INC     DPTR
+0028 E0              877             MOVX    A,@DPTR
+0029 F5F5            878             MOV     FEARL,A
+                     879     ;       FEARM = (unsigned char)((addr>>8)&0xff);
+                     880                             ; SOURCE LINE # 245
+002B 900000   F      881             MOV     DPTR,#addr?748
+002E E0              882             MOVX    A,@DPTR
+002F F5F6            883             MOV     FEARM,A
+                     884     ;       FEARH = 0x00;
+                     885                             ; SOURCE LINE # 246
+0031 E4              886             CLR     A
+0032 F5F7            887             MOV     FEARH,A
+                     888     ; 
+                     889     ;     write_page_buffer(dt);
+                     890                             ; SOURCE LINE # 248
+0034 900000   F      891             MOV     DPTR,#dt?749
+0037 E0              892             MOVX    A,@DPTR
+0038 FB              893             MOV     R3,A
+0039 A3              894             INC     DPTR
+003A E0              895             MOVX    A,@DPTR
+003B FA              896             MOV     R2,A
+003C A3              897             INC     DPTR
+003D E0              898             MOVX    A,@DPTR
+003E F9              899             MOV     R1,A
+003F 120000   F      900             LCALL   _write_page_buffer
+                     901     ; 
+                     902     ;    // 0xA1
+                     903     ;     g_FEMR = FLASH_SEL         |              // FSEL (Select Flash memory)
+                     904                             ; SOURCE LINE # 251
+0042 7500A1   F      905             MOV     g_FEMR,#0A1H
+                     906     ;              FLASH_PGM_MODE    |              // PGM (Enable program or verify mode with 
+                             VFY)
+                     907     ;              FLASH_CON_ENABLE;                        // FEEN (Enable program & erase of 
+                             Flash)
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE    15
+
+                     908     ; 
+                     909     ;     // 0x0B
+                     910     ;     g_FECR = FLASH_START_ERASE_PGM;           // WRITE (Start program or erase)
+                     911                             ; SOURCE LINE # 256
+0045 75000B   F      912             MOV     g_FECR,#0BH
+                     913     ;                                                                               // FERSTB (
+                             Reset Flash and EEPROM)
+                     914     ;                                                                               // PBRSTB (
+                             Reset page buffer)
+                     915     ;       
+                     916     ;       if(flash_state_id != FLASH_WRITE_SECURITY_ID)
+                     917                             ; SOURCE LINE # 260
+0048 900000   F      918             MOV     DPTR,#flash_state_id?752
+004B E0              919             MOVX    A,@DPTR
+004C 64F0            920             XRL     A,#0F0H
+004E 6009            921             JZ      ?C0016
+                     922     ;       {
+                     923                             ; SOURCE LINE # 261
+                     924     ;               Flash_Exit();
+                     925                             ; SOURCE LINE # 262
+0050 120000   F      926             LCALL   Flash_Exit
+                     927     ;               WDTMR = 0;                                              // If Flash ID fail
+                             , may be WDTMR value error.
+                     928                             ; SOURCE LINE # 263
+0053 E4              929             CLR     A
+0054 F58D            930             MOV     WDTMR,A
+                     931     ;               
+                     932     ;               return -1;
+                     933                             ; SOURCE LINE # 265
+0056 7FFF            934             MOV     R7,#0FFH
+0058 22              935             RET     
+                     936     ;       }
+                     937                             ; SOURCE LINE # 266
+0059                 938     ?C0016:
+                     939     ;       
+                     940     ;     do_flash_at_sram();
+                     941                             ; SOURCE LINE # 268
+0059 120000   F      942             LCALL   do_flash_at_sram
+                     943     ;  
+                     944     ;       Flash_Exit();
+                     945                             ; SOURCE LINE # 270
+005C 120000   F      946             LCALL   Flash_Exit
+                     947     ;       
+                     948     ;       // read data
+                     949     ;       pdt = dt;
+                     950                             ; SOURCE LINE # 273
+005F 900000   F      951             MOV     DPTR,#dt?749
+0062 E0              952             MOVX    A,@DPTR
+0063 FB              953             MOV     R3,A
+0064 A3              954             INC     DPTR
+0065 E0              955             MOVX    A,@DPTR
+0066 FA              956             MOV     R2,A
+0067 A3              957             INC     DPTR
+0068 E0              958             MOVX    A,@DPTR
+0069 F9              959             MOV     R1,A
+                     960     ;---- Variable 'pdt?751' assigned to Register 'R1/R2/R3' ----
+                     961     ;       for(i=0;i<PAGEBUF_SIZE;i++)             // Read flash data.
+                     962                             ; SOURCE LINE # 274
+006A E4              963             CLR     A
+006B A3              964             INC     DPTR
+006C F0              965             MOVX    @DPTR,A
+006D A3              966             INC     DPTR
+006E F0              967             MOVX    @DPTR,A
+006F                 968     ?C0018:
+006F C3              969             CLR     C
+0070 900000   F      970             MOV     DPTR,#i?750+01H
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE    16
+
+0073 E0              971             MOVX    A,@DPTR
+0074 9420            972             SUBB    A,#020H
+0076 900000   F      973             MOV     DPTR,#i?750
+0079 E0              974             MOVX    A,@DPTR
+007A 9400            975             SUBB    A,#00H
+007C 503C            976             JNC     ?C0019
+                     977     ;       {       
+                     978                             ; SOURCE LINE # 275
+                     979     ;               if (coderom[addr]!=*pdt) 
+                     980                             ; SOURCE LINE # 276
+007E 120000   F      981             LCALL   ?C?CLDPTR
+0081 FF              982             MOV     R7,A
+0082 900000   F      983             MOV     DPTR,#addr?748
+0085 E0              984             MOVX    A,@DPTR
+0086 FC              985             MOV     R4,A
+0087 A3              986             INC     DPTR
+0088 E0              987             MOVX    A,@DPTR
+0089 F582            988             MOV     DPL,A
+008B 8C83            989             MOV     DPH,R4
+008D E4              990             CLR     A
+008E 93              991             MOVC    A,@A+DPTR
+008F 6F              992             XRL     A,R7
+0090 6003            993             JZ      ?C0021
+                     994     ;                       return -2;
+                     995                             ; SOURCE LINE # 277
+0092 7FFE            996             MOV     R7,#0FEH
+0094 22              997             RET     
+0095                 998     ?C0021:
+                     999     ;               
+                    1000     ;               addr++;
+                    1001                             ; SOURCE LINE # 279
+0095 900000   F     1002             MOV     DPTR,#addr?748+01H
+0098 E0             1003             MOVX    A,@DPTR
+0099 04             1004             INC     A
+009A F0             1005             MOVX    @DPTR,A
+009B 7006           1006             JNZ     ?C0028
+009D 900000   F     1007             MOV     DPTR,#addr?748
+00A0 E0             1008             MOVX    A,@DPTR
+00A1 04             1009             INC     A
+00A2 F0             1010             MOVX    @DPTR,A
+00A3                1011     ?C0028:
+                    1012     ;               pdt++;
+                    1013                             ; SOURCE LINE # 280
+00A3 7401           1014             MOV     A,#01H
+00A5 29             1015             ADD     A,R1
+00A6 F9             1016             MOV     R1,A
+00A7 E4             1017             CLR     A
+00A8 3A             1018             ADDC    A,R2
+00A9 FA             1019             MOV     R2,A
+                    1020     ;       }
+                    1021                             ; SOURCE LINE # 281
+00AA 900000   F     1022             MOV     DPTR,#i?750+01H
+00AD E0             1023             MOVX    A,@DPTR
+00AE 04             1024             INC     A
+00AF F0             1025             MOVX    @DPTR,A
+00B0 7006           1026             JNZ     ?C0029
+00B2 900000   F     1027             MOV     DPTR,#i?750
+00B5 E0             1028             MOVX    A,@DPTR
+00B6 04             1029             INC     A
+00B7 F0             1030             MOVX    @DPTR,A
+00B8                1031     ?C0029:
+00B8 80B5           1032             SJMP    ?C0018
+00BA                1033     ?C0019:
+                    1034     ;       
+                    1035     ;       return 0;
+                    1036                             ; SOURCE LINE # 283
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE    17
+
+00BA 7F00           1037             MOV     R7,#00H
+                    1038     ; }
+                    1039                             ; SOURCE LINE # 284
+00BC                1040     ?C0017:
+00BC 22             1041             RET     
+                    1042     ; END OF _Flash_Write
+                    1043     
+                    1044     ; 
+                    1045     ; char Flash_Read(unsigned int addr, unsigned char *dt, unsigned char length)
+                    1046     
+----                1047             RSEG  ?PR?_Flash_Read?FLASH
+0000                1048     _Flash_Read:
+                    1049             USING   0
+                    1050                             ; SOURCE LINE # 286
+0000 900000   F     1051             MOV     DPTR,#addr?853
+0003 EE             1052             MOV     A,R6
+0004 F0             1053             MOVX    @DPTR,A
+0005 A3             1054             INC     DPTR
+0006 EF             1055             MOV     A,R7
+0007 F0             1056             MOVX    @DPTR,A
+                    1057     ;---- Variable 'dt?854' assigned to Register 'R1/R2/R3' ----
+                    1058     ; {
+                    1059                             ; SOURCE LINE # 287
+                    1060     ;       unsigned int i;
+                    1061     ;       unsigned char *pdt;
+                    1062     ;       
+                    1063     ;       // read data
+                    1064     ;       pdt = dt;
+                    1065                             ; SOURCE LINE # 292
+                    1066     ;---- Variable 'pdt?857' assigned to Register 'R1/R2/R3' ----
+                    1067     ;       for(i=addr; i<(addr+length); i++)       // Read flash data.
+                    1068                             ; SOURCE LINE # 293
+0008 900000   F     1069             MOV     DPTR,#addr?853
+000B E0             1070             MOVX    A,@DPTR
+000C FF             1071             MOV     R7,A
+000D A3             1072             INC     DPTR
+000E E0             1073             MOVX    A,@DPTR
+000F 900000   F     1074             MOV     DPTR,#i?856
+0012 CF             1075             XCH     A,R7
+0013 F0             1076             MOVX    @DPTR,A
+0014 A3             1077             INC     DPTR
+0015 EF             1078             MOV     A,R7
+0016 F0             1079             MOVX    @DPTR,A
+0017                1080     ?C0022:
+0017 900000   F     1081             MOV     DPTR,#length?855
+001A E0             1082             MOVX    A,@DPTR
+001B FF             1083             MOV     R7,A
+001C 900000   F     1084             MOV     DPTR,#addr?853+01H
+001F E0             1085             MOVX    A,@DPTR
+0020 2F             1086             ADD     A,R7
+0021 FF             1087             MOV     R7,A
+0022 900000   F     1088             MOV     DPTR,#addr?853
+0025 E0             1089             MOVX    A,@DPTR
+0026 3400           1090             ADDC    A,#00H
+0028 FE             1091             MOV     R6,A
+0029 C3             1092             CLR     C
+002A 900000   F     1093             MOV     DPTR,#i?856+01H
+002D E0             1094             MOVX    A,@DPTR
+002E 9F             1095             SUBB    A,R7
+002F 900000   F     1096             MOV     DPTR,#i?856
+0032 E0             1097             MOVX    A,@DPTR
+0033 9E             1098             SUBB    A,R6
+0034 5024           1099             JNC     ?C0023
+                    1100     ;       {
+                    1101                             ; SOURCE LINE # 294
+                    1102     ;               *pdt = coderom[i];
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE    18
+
+                    1103                             ; SOURCE LINE # 295
+0036 E0             1104             MOVX    A,@DPTR
+0037 FE             1105             MOV     R6,A
+0038 A3             1106             INC     DPTR
+0039 E0             1107             MOVX    A,@DPTR
+003A F582           1108             MOV     DPL,A
+003C 8E83           1109             MOV     DPH,R6
+003E E4             1110             CLR     A
+003F 93             1111             MOVC    A,@A+DPTR
+0040 120000   F     1112             LCALL   ?C?CSTPTR
+                    1113     ;               pdt++;
+                    1114                             ; SOURCE LINE # 296
+0043 7401           1115             MOV     A,#01H
+0045 29             1116             ADD     A,R1
+0046 F9             1117             MOV     R1,A
+0047 E4             1118             CLR     A
+0048 3A             1119             ADDC    A,R2
+0049 FA             1120             MOV     R2,A
+                    1121     ;       }
+                    1122                             ; SOURCE LINE # 297
+004A 900000   F     1123             MOV     DPTR,#i?856+01H
+004D E0             1124             MOVX    A,@DPTR
+004E 04             1125             INC     A
+004F F0             1126             MOVX    @DPTR,A
+0050 7006           1127             JNZ     ?C0030
+0052 900000   F     1128             MOV     DPTR,#i?856
+0055 E0             1129             MOVX    A,@DPTR
+0056 04             1130             INC     A
+0057 F0             1131             MOVX    @DPTR,A
+0058                1132     ?C0030:
+0058 80BD           1133             SJMP    ?C0022
+005A                1134     ?C0023:
+                    1135     ;       
+                    1136     ;       return 0;
+                    1137                             ; SOURCE LINE # 299
+005A 7F00           1138             MOV     R7,#00H
+                    1139     ; }
+                    1140                             ; SOURCE LINE # 300
+005C 22             1141             RET     
+                    1142     ; END OF _Flash_Read
+                    1143     
+                    1144             END
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE    19
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E                          T Y P E  V A L U E   ATTRIBUTES
+
+?C0006. . . . . . . . . . . . .  C ADDR   000AH   R   SEG=?PR?DO_FLASH_AT_SRAM?FLASH
+?C0007. . . . . . . . . . . . .  C ADDR   0028H   R   SEG=?PR?DO_FLASH_AT_SRAM?FLASH
+?C0010. . . . . . . . . . . . .  C ADDR   0040H   R   SEG=?PR?_FLASH_ERASE?FLASH
+?C0011. . . . . . . . . . . . .  C ADDR   007BH   R   SEG=?PR?_FLASH_ERASE?FLASH
+?C0012. . . . . . . . . . . . .  C ADDR   0049H   R   SEG=?PR?_FLASH_ERASE?FLASH
+?C0013. . . . . . . . . . . . .  C ADDR   0079H   R   SEG=?PR?_FLASH_ERASE?FLASH
+?C0015. . . . . . . . . . . . .  C ADDR   0064H   R   SEG=?PR?_FLASH_ERASE?FLASH
+?C0016. . . . . . . . . . . . .  C ADDR   0059H   R   SEG=?PR?_FLASH_WRITE?FLASH
+?C0017. . . . . . . . . . . . .  C ADDR   00BCH   R   SEG=?PR?_FLASH_WRITE?FLASH
+?C0018. . . . . . . . . . . . .  C ADDR   006FH   R   SEG=?PR?_FLASH_WRITE?FLASH
+?C0019. . . . . . . . . . . . .  C ADDR   00BAH   R   SEG=?PR?_FLASH_WRITE?FLASH
+?C0021. . . . . . . . . . . . .  C ADDR   0095H   R   SEG=?PR?_FLASH_WRITE?FLASH
+?C0022. . . . . . . . . . . . .  C ADDR   0017H   R   SEG=?PR?_FLASH_READ?FLASH
+?C0023. . . . . . . . . . . . .  C ADDR   005AH   R   SEG=?PR?_FLASH_READ?FLASH
+?C0026. . . . . . . . . . . . .  C ADDR   0072H   R   SEG=?PR?_FLASH_ERASE?FLASH
+?C0027. . . . . . . . . . . . .  C ADDR   0077H   R   SEG=?PR?_FLASH_ERASE?FLASH
+?C0028. . . . . . . . . . . . .  C ADDR   00A3H   R   SEG=?PR?_FLASH_WRITE?FLASH
+?C0029. . . . . . . . . . . . .  C ADDR   00B8H   R   SEG=?PR?_FLASH_WRITE?FLASH
+?C0030. . . . . . . . . . . . .  C ADDR   0058H   R   SEG=?PR?_FLASH_READ?FLASH
+?C?CLDPTR . . . . . . . . . . .  C ADDR   -----       EXT
+?C?CSTPTR . . . . . . . . . . .  C ADDR   -----       EXT
+?DO_FLASH_AT_SRAM?BYTE. . . . .  X ADDR   0000H   R   SEG=?XD?DO_FLASH_AT_SRAM?FLASH
+?DT?FLASH . . . . . . . . . . .  D SEG    0006H       REL=UNIT
+?PR?DO_FLASH_AT_SRAM?FLASH. . .  C SEG    002CH       REL=UNIT
+?PR?DO_FLASH_AT_SRAM_SRC?FLASH.  C SEG    000FH       REL=UNIT
+?PR?FLASH_ENTER?FLASH . . . . .  C SEG    002FH       REL=UNIT
+?PR?FLASH_EXIT?FLASH. . . . . .  C SEG    002FH       REL=UNIT
+?PR?WRITE_PAGE_BUFFER_SRC?FLASH  C SEG    0012H       REL=UNIT
+?PR?_FLASH_ERASE?FLASH. . . . .  C SEG    007CH       REL=UNIT
+?PR?_FLASH_READ?FLASH . . . . .  C SEG    005DH       REL=UNIT
+?PR?_FLASH_WRITE?FLASH. . . . .  C SEG    00BDH       REL=UNIT
+?PR?_WRITE_PAGE_BUFFER?FLASH. .  C SEG    001DH       REL=UNIT
+?XD?DO_FLASH_AT_SRAM?FLASH. . .  X SEG    0001H       REL=UNIT
+?XD?_FLASH_ERASE?FLASH. . . . .  X SEG    0002H       REL=UNIT
+?XD?_FLASH_READ?FLASH . . . . .  X SEG    0008H       REL=UNIT
+?XD?_FLASH_WRITE?FLASH. . . . .  X SEG    0008H       REL=UNIT
+?XD?_WRITE_PAGE_BUFFER?FLASH. .  X SEG    0003H       REL=UNIT
+?_FLASH_ERASE?BYTE. . . . . . .  X ADDR   0000H   R   SEG=?XD?_FLASH_ERASE?FLASH
+?_FLASH_READ?BYTE . . . . . . .  X ADDR   0000H   R   SEG=?XD?_FLASH_READ?FLASH
+?_FLASH_WRITE?BYTE. . . . . . .  X ADDR   0000H   R   SEG=?XD?_FLASH_WRITE?FLASH
+?_WRITE_PAGE_BUFFER?BYTE. . . .  X ADDR   0000H   R   SEG=?XD?_WRITE_PAGE_BUFFER?FLASH
+AC. . . . . . . . . . . . . . .  B ADDR   00D0H.6 A   
+ACC . . . . . . . . . . . . . .  D ADDR   00E0H   A   
+ADCM. . . . . . . . . . . . . .  D ADDR   0095H   A   
+ADCM1 . . . . . . . . . . . . .  D ADDR   0096H   A   
+ADCR. . . . . . . . . . . . . .  D ADDR   0096H   A   
+ADCRH . . . . . . . . . . . . .  D ADDR   0097H   A   
+ADCRL . . . . . . . . . . . . .  D ADDR   0096H   A   
+ADC_INT_EN. . . . . . . . . . .  B ADDR   00C8H.0 A   
+ADC_INT_F . . . . . . . . . . .  B ADDR   00B0H.0 A   
+ADDR?645. . . . . . . . . . . .  X ADDR   0000H   R   SEG=?XD?_FLASH_ERASE?FLASH
+ADDR?748. . . . . . . . . . . .  X ADDR   0000H   R   SEG=?XD?_FLASH_WRITE?FLASH
+ADDR?853. . . . . . . . . . . .  X ADDR   0000H   R   SEG=?XD?_FLASH_READ?FLASH
+AR4 . . . . . . . . . . . . . .  D ADDR   0004H   A   
+B . . . . . . . . . . . . . . .  D ADDR   00F0H   A   
+BITCNT. . . . . . . . . . . . .  D ADDR   0085H   A   
+BITCR . . . . . . . . . . . . .  D ADDR   0086H   A   
+BIT_INT_EN. . . . . . . . . . .  B ADDR   00C8H.2 A   
+BIT_INT_F . . . . . . . . . . .  B ADDR   00B0H.2 A   
+CMPCR . . . . . . . . . . . . .  D ADDR   00D6H   A   
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE    20
+
+CMPDBT. . . . . . . . . . . . .  D ADDR   00DEH   A   
+CMPTR . . . . . . . . . . . . .  D ADDR   00D7H   A   
+CMP_INT_EN. . . . . . . . . . .  B ADDR   00B8H.0 A   
+CMP_INT_F . . . . . . . . . . .  B ADDR   00A0H.0 A   
+CMX . . . . . . . . . . . . . .  D ADDR   00B2H   A   
+CODE_BUF. . . . . . . . . . . .  D ADDR   0030H   A   
+CY. . . . . . . . . . . . . . .  B ADDR   00D0H.7 A   
+DBTSR . . . . . . . . . . . . .  D ADDR   0084H   A   
+DMY_REFA. . . . . . . . . . . .  D ADDR   00D4H   A   
+DMY_REFB. . . . . . . . . . . .  D ADDR   00D5H   A   
+DO_FLASH_AT_SRAM. . . . . . . .  C ADDR   0000H   R   SEG=?PR?DO_FLASH_AT_SRAM?FLASH
+DO_FLASH_AT_SRAM_SRC. . . . . .  C ADDR   0000H   R   SEG=?PR?DO_FLASH_AT_SRAM_SRC?FLASH
+DPH . . . . . . . . . . . . . .  D ADDR   0083H   A   
+DPH1. . . . . . . . . . . . . .  D ADDR   0083H   A   
+DPL . . . . . . . . . . . . . .  D ADDR   0082H   A   
+DPL1. . . . . . . . . . . . . .  D ADDR   0082H   A   
+DPTR0 . . . . . . . . . . . . .  D ADDR   0082H   A   
+DPTR1 . . . . . . . . . . . . .  D ADDR   0082H   A   
+DT?749. . . . . . . . . . . . .  X ADDR   0002H   R   SEG=?XD?_FLASH_WRITE?FLASH
+DT?854. . . . . . . . . . . . .  X ADDR   0002H   R   SEG=?XD?_FLASH_READ?FLASH
+EA. . . . . . . . . . . . . . .  B ADDR   00B8H.7 A   
+EIFLAG. . . . . . . . . . . . .  D ADDR   00C9H   A   
+EIN10_INT_F . . . . . . . . . .  B ADDR   00A0H.1 A   
+EIN11_INT_F . . . . . . . . . .  B ADDR   00A0H.2 A   
+EIN12_INT_F . . . . . . . . . .  B ADDR   00A0H.3 A   
+EINT10_INT_EN . . . . . . . . .  B ADDR   00B8H.1 A   
+EINT11_INT_EN . . . . . . . . .  B ADDR   00B8H.2 A   
+EINT12_INT_EN . . . . . . . . .  B ADDR   00B8H.3 A   
+EINT_INT_EN . . . . . . . . . .  B ADDR   00B8H.4 A   
+EINT_INT_F. . . . . . . . . . .  B ADDR   00A0H.4 A   
+EIPOL0. . . . . . . . . . . . .  D ADDR   008BH   A   
+EIPOL1. . . . . . . . . . . . .  D ADDR   008CH   A   
+EO. . . . . . . . . . . . . . .  D ADDR   00A2H   A   
+F0. . . . . . . . . . . . . . .  B ADDR   00D0H.5 A   
+F1. . . . . . . . . . . . . . .  B ADDR   00D0H.1 A   
+FEARH . . . . . . . . . . . . .  D ADDR   00F7H   A   
+FEARL . . . . . . . . . . . . .  D ADDR   00F5H   A   
+FEARM . . . . . . . . . . . . .  D ADDR   00F6H   A   
+FECR. . . . . . . . . . . . . .  D ADDR   00F2H   A   
+FEDR. . . . . . . . . . . . . .  D ADDR   00EFH   A   
+FEMR. . . . . . . . . . . . . .  D ADDR   00F1H   A   
+FESR. . . . . . . . . . . . . .  D ADDR   00F3H   A   
+FETCR . . . . . . . . . . . . .  D ADDR   00F4H   A   
+FETR. . . . . . . . . . . . . .  D ADDR   00E7H   A   
+FLASH . . . . . . . . . . . . .  N NUMB   -----       
+FLASH_ENTER . . . . . . . . . .  C ADDR   0000H   R   SEG=?PR?FLASH_ENTER?FLASH
+FLASH_EXIT. . . . . . . . . . .  C ADDR   0000H   R   SEG=?PR?FLASH_EXIT?FLASH
+FLASH_STATE_ID?752. . . . . . .  X ADDR   0007H   R   SEG=?XD?_FLASH_WRITE?FLASH
+FPCR. . . . . . . . . . . . . .  D ADDR   00ECH   A   
+G_FECR. . . . . . . . . . . . .  D ADDR   0004H   R   SEG=?DT?FLASH
+G_FEMR. . . . . . . . . . . . .  D ADDR   0005H   R   SEG=?DT?FLASH
+G_IE. . . . . . . . . . . . . .  D ADDR   0002H   R   SEG=?DT?FLASH
+G_IE1 . . . . . . . . . . . . .  D ADDR   0000H   R   SEG=?DT?FLASH
+G_IE2 . . . . . . . . . . . . .  D ADDR   0001H   R   SEG=?DT?FLASH
+G_WDTMR . . . . . . . . . . . .  D ADDR   0003H   R   SEG=?DT?FLASH
+I2CDR . . . . . . . . . . . . .  D ADDR   00FDH   A   
+I2CMR . . . . . . . . . . . . .  D ADDR   00F9H   A   
+I2CSAR. . . . . . . . . . . . .  D ADDR   00FEH   A   
+I2CSAR1 . . . . . . . . . . . .  D ADDR   00FFH   A   
+I2CSCLHR. . . . . . . . . . . .  D ADDR   00FBH   A   
+I2CSCLLR. . . . . . . . . . . .  D ADDR   00FAH   A   
+I2CSDHR . . . . . . . . . . . .  D ADDR   00FCH   A   
+I2CSR . . . . . . . . . . . . .  D ADDR   00F8H   A   
+I2C_INT_EN. . . . . . . . . . .  B ADDR   00C0H.0 A   
+I2C_INT_F . . . . . . . . . . .  B ADDR   00A8H.0 A   
+I?750 . . . . . . . . . . . . .  X ADDR   0005H   R   SEG=?XD?_FLASH_WRITE?FLASH
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE    21
+
+I?856 . . . . . . . . . . . . .  X ADDR   0006H   R   SEG=?XD?_FLASH_READ?FLASH
+IE. . . . . . . . . . . . . . .  D ADDR   00B8H   A   
+IE1 . . . . . . . . . . . . . .  D ADDR   00C0H   A   
+IE2 . . . . . . . . . . . . . .  D ADDR   00C8H   A   
+ILVL. . . . . . . . . . . . . .  D ADDR   009AH   A   
+IOFFSET . . . . . . . . . . . .  D ADDR   008AH   A   
+IP. . . . . . . . . . . . . . .  D ADDR   00E8H   A   
+IP1 . . . . . . . . . . . . . .  D ADDR   00E9H   A   
+IP2 . . . . . . . . . . . . . .  D ADDR   00EAH   A   
+IRQ0. . . . . . . . . . . . . .  D ADDR   00A0H   A   
+IRQ1. . . . . . . . . . . . . .  D ADDR   00A8H   A   
+IRQ2. . . . . . . . . . . . . .  D ADDR   00B0H   A   
+LDOCR . . . . . . . . . . . . .  D ADDR   00AAH   A   
+LENGTH?855. . . . . . . . . . .  X ADDR   0005H   R   SEG=?XD?_FLASH_READ?FLASH
+LOOP0 . . . . . . . . . . . . .  C ADDR   001CH   R   SEG=?PR?FLASH_EXIT?FLASH
+LVIR. . . . . . . . . . . . . .  D ADDR   0089H   A   
+LVI_INT_EN. . . . . . . . . . .  B ADDR   00C8H.3 A   
+LVI_INT_F . . . . . . . . . . .  B ADDR   00B0H.3 A   
+OSCCR . . . . . . . . . . . . .  D ADDR   00D8H   A   
+OV. . . . . . . . . . . . . . .  B ADDR   00D0H.2 A   
+P . . . . . . . . . . . . . . .  B ADDR   00D0H.0 A   
+P0. . . . . . . . . . . . . . .  D ADDR   0080H   A   
+P00 . . . . . . . . . . . . . .  B ADDR   0080H.0 A   
+P01 . . . . . . . . . . . . . .  B ADDR   0080H.1 A   
+P02 . . . . . . . . . . . . . .  B ADDR   0080H.2 A   
+P03 . . . . . . . . . . . . . .  B ADDR   0080H.3 A   
+P04 . . . . . . . . . . . . . .  B ADDR   0080H.4 A   
+P05 . . . . . . . . . . . . . .  B ADDR   0080H.5 A   
+P06 . . . . . . . . . . . . . .  B ADDR   0080H.6 A   
+P07 . . . . . . . . . . . . . .  B ADDR   0080H.7 A   
+P0DB. . . . . . . . . . . . . .  D ADDR   009EH   A   
+P0FSR . . . . . . . . . . . . .  D ADDR   00B3H   A   
+P0FSRH. . . . . . . . . . . . .  D ADDR   00B4H   A   
+P0FSRL. . . . . . . . . . . . .  D ADDR   00B3H   A   
+P0IO. . . . . . . . . . . . . .  D ADDR   009BH   A   
+P0OD. . . . . . . . . . . . . .  D ADDR   009DH   A   
+P0PU. . . . . . . . . . . . . .  D ADDR   009CH   A   
+P1. . . . . . . . . . . . . . .  D ADDR   0088H   A   
+P10 . . . . . . . . . . . . . .  B ADDR   0088H.0 A   
+P11 . . . . . . . . . . . . . .  B ADDR   0088H.1 A   
+P12 . . . . . . . . . . . . . .  B ADDR   0088H.2 A   
+P13 . . . . . . . . . . . . . .  B ADDR   0088H.3 A   
+P14 . . . . . . . . . . . . . .  B ADDR   0088H.4 A   
+P15 . . . . . . . . . . . . . .  B ADDR   0088H.5 A   
+P1DB. . . . . . . . . . . . . .  D ADDR   00A6H   A   
+P1FSR . . . . . . . . . . . . .  D ADDR   00B5H   A   
+P1FSRH. . . . . . . . . . . . .  D ADDR   00B6H   A   
+P1FSRL. . . . . . . . . . . . .  D ADDR   00B5H   A   
+P1IO. . . . . . . . . . . . . .  D ADDR   00A3H   A   
+P1OD. . . . . . . . . . . . . .  D ADDR   00A5H   A   
+P1PU. . . . . . . . . . . . . .  D ADDR   00A4H   A   
+P2. . . . . . . . . . . . . . .  D ADDR   0090H   A   
+P20 . . . . . . . . . . . . . .  B ADDR   0090H.0 A   
+P21 . . . . . . . . . . . . . .  B ADDR   0090H.1 A   
+P22 . . . . . . . . . . . . . .  B ADDR   0090H.2 A   
+P23 . . . . . . . . . . . . . .  B ADDR   0090H.3 A   
+P2DB. . . . . . . . . . . . . .  D ADDR   00AEH   A   
+P2FSR . . . . . . . . . . . . .  D ADDR   00B7H   A   
+P2IO. . . . . . . . . . . . . .  D ADDR   00ABH   A   
+P2OD. . . . . . . . . . . . . .  D ADDR   00ADH   A   
+P2PU. . . . . . . . . . . . . .  D ADDR   00ACH   A   
+PCON. . . . . . . . . . . . . .  D ADDR   0087H   A   
+PSW . . . . . . . . . . . . . .  D ADDR   00D0H   A   
+RS0 . . . . . . . . . . . . . .  B ADDR   00D0H.3 A   
+RS1 . . . . . . . . . . . . . .  B ADDR   00D0H.4 A   
+RSFR. . . . . . . . . . . . . .  D ADDR   0098H   A   
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE    22
+
+SCCR. . . . . . . . . . . . . .  D ADDR   00D9H   A   
+SP. . . . . . . . . . . . . . .  D ADDR   0081H   A   
+SYSCON_AR . . . . . . . . . . .  D ADDR   008FH   A   
+T0CDR . . . . . . . . . . . . .  D ADDR   0094H   A   
+T0CNT . . . . . . . . . . . . .  D ADDR   0093H   A   
+T0CR. . . . . . . . . . . . . .  D ADDR   0092H   A   
+T0DR. . . . . . . . . . . . . .  D ADDR   0094H   A   
+T0_INT_EN . . . . . . . . . . .  B ADDR   00C0H.4 A   
+T0_INT_F. . . . . . . . . . . .  B ADDR   00A8H.4 A   
+T1ADR . . . . . . . . . . . . .  D ADDR   00BCH   A   
+T1ADRH. . . . . . . . . . . . .  D ADDR   00BDH   A   
+T1ADRL. . . . . . . . . . . . .  D ADDR   00BCH   A   
+T1BDR . . . . . . . . . . . . .  D ADDR   00BEH   A   
+T1BDRH. . . . . . . . . . . . .  D ADDR   00BFH   A   
+T1BDRL. . . . . . . . . . . . .  D ADDR   00BEH   A   
+T1CDR . . . . . . . . . . . . .  D ADDR   00CCH   A   
+T1CDRH. . . . . . . . . . . . .  D ADDR   00CDH   A   
+T1CDRL. . . . . . . . . . . . .  D ADDR   00CCH   A   
+T1CR. . . . . . . . . . . . . .  D ADDR   00BAH   A   
+T1CRH . . . . . . . . . . . . .  D ADDR   00BBH   A   
+T1CRL . . . . . . . . . . . . .  D ADDR   00BAH   A   
+T1DDR . . . . . . . . . . . . .  D ADDR   00CEH   A   
+T1DDRH. . . . . . . . . . . . .  D ADDR   00CFH   A   
+T1DDRL. . . . . . . . . . . . .  D ADDR   00CEH   A   
+T1_INT_EN . . . . . . . . . . .  B ADDR   00C0H.5 A   
+T1_INT_F. . . . . . . . . . . .  B ADDR   00A8H.5 A   
+T2ADR . . . . . . . . . . . . .  D ADDR   00C4H   A   
+T2ADRH. . . . . . . . . . . . .  D ADDR   00C5H   A   
+T2ADRL. . . . . . . . . . . . .  D ADDR   00C4H   A   
+T2BDR . . . . . . . . . . . . .  D ADDR   00C6H   A   
+T2BDRH. . . . . . . . . . . . .  D ADDR   00C7H   A   
+T2BDRL. . . . . . . . . . . . .  D ADDR   00C6H   A   
+T2CR. . . . . . . . . . . . . .  D ADDR   00C2H   A   
+T2CRH . . . . . . . . . . . . .  D ADDR   00C3H   A   
+T2CRL . . . . . . . . . . . . .  D ADDR   00C2H   A   
+T2_INT_EN . . . . . . . . . . .  B ADDR   00C0H.6 A   
+T2_INT_F. . . . . . . . . . . .  B ADDR   00A8H.6 A   
+TDISR . . . . . . . . . . . . .  D ADDR   00D3H   A   
+TEMP?441. . . . . . . . . . . .  X ADDR   0000H   R   SEG=?XD?_WRITE_PAGE_BUFFER?FLASH
+TEMP?543. . . . . . . . . . . .  X ADDR   0000H   R   SEG=?XD?DO_FLASH_AT_SRAM?FLASH
+TEST. . . . . . . . . . . . . .  D ADDR   00D1H   A   
+TESTH . . . . . . . . . . . . .  D ADDR   00D2H   A   
+TESTL . . . . . . . . . . . . .  D ADDR   00D1H   A   
+UART_RX_INT_EN. . . . . . . . .  B ADDR   00C0H.1 A   
+UART_RX_INT_F . . . . . . . . .  B ADDR   00A8H.1 A   
+UART_TX_INT_EN. . . . . . . . .  B ADDR   00C0H.2 A   
+UART_TX_INT_F . . . . . . . . .  B ADDR   00A8H.2 A   
+UBAUD . . . . . . . . . . . . .  D ADDR   00E5H   A   
+UCTRL1. . . . . . . . . . . . .  D ADDR   00E1H   A   
+UCTRL2. . . . . . . . . . . . .  D ADDR   00E2H   A   
+UCTRL3. . . . . . . . . . . . .  D ADDR   00E3H   A   
+UCTRL4. . . . . . . . . . . . .  D ADDR   00EBH   A   
+UDATA . . . . . . . . . . . . .  D ADDR   00E6H   A   
+USTAT . . . . . . . . . . . . .  D ADDR   00E4H   A   
+WDTCR . . . . . . . . . . . . .  D ADDR   008EH   A   
+WDTMR . . . . . . . . . . . . .  D ADDR   008DH   A   
+WDTR. . . . . . . . . . . . . .  D ADDR   008EH   A   
+WDT_INT_EN. . . . . . . . . . .  B ADDR   00C8H.1 A   
+WDT_INT_F . . . . . . . . . . .  B ADDR   00B0H.1 A   
+WRITE_PAGE_BUFFER_LOOP. . . . .  C ADDR   0012H   R   SEG=?PR?_WRITE_PAGE_BUFFER?FLASH
+WRITE_PAGE_BUFFER_SRC . . . . .  C ADDR   0000H   R   SEG=?PR?WRITE_PAGE_BUFFER_SRC?FLASH
+WRITE_PAGE_BUFFER_SRC_LOOP. . .  C ADDR   0008H   R   SEG=?PR?WRITE_PAGE_BUFFER_SRC?FLASH
+XBANK . . . . . . . . . . . . .  D ADDR   00DFH   A   
+_FLASH_BUSY_WAIT. . . . . . . .  C ADDR   0006H   R   SEG=?PR?DO_FLASH_AT_SRAM_SRC?FLASH
+_FLASH_ERASE. . . . . . . . . .  C ADDR   0000H   R   SEG=?PR?_FLASH_ERASE?FLASH
+_FLASH_READ . . . . . . . . . .  C ADDR   0000H   R   SEG=?PR?_FLASH_READ?FLASH
+A51 MACRO ASSEMBLER  FLASH                                                                12/19/2022 10:49:28 PAGE    23
+
+_FLASH_WRITE. . . . . . . . . .  C ADDR   0000H   R   SEG=?PR?_FLASH_WRITE?FLASH
+_WRITE_PAGE_BUFFER. . . . . . .  C ADDR   0000H   R   SEG=?PR?_WRITE_PAGE_BUFFER?FLASH
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

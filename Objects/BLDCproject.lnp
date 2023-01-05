@@ -1,0 +1,13 @@
+".\Objects\STARTUP.obj",
+".\Objects\Initialisation.obj",
+".\Objects\main.obj",
+".\Objects\Interrupt.obj",
+".\Objects\flash.obj",
+".\Objects\Flash operation.obj",
+".\Objects\NEC IR.obj",
+".\Objects\PWM.obj",
+".\Objects\I2C.obj" 
+TO ".\Objects\BLDCproject" 
+PRINT(".\Listings\BLDCproject.m51") RAMSIZE(256) 
+CODE( 0X0000-0XFFFF )
+XDATA( 0X0000-0X01FF )

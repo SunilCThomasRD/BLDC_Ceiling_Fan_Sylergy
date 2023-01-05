@@ -1,0 +1,16 @@
+// MTP : FOR TUNING THE MOTOR PARAMETER PLS CHANGE HERE
+#define MotorPara1_Value	0x0C//0x07
+#define MotorPara2_Value	0X01//0x81
+#define MotorPara3_Value	0XC0//0x66
+#define MotorPara4_Value        0x2E
+#define MotorPara5_Value        0x90 //90
+#define SysOpt0_Value		0X00//0x00
+#define SysOpt1_Value		0X70//0x70
+#define SysOpt2_Value		0x18
+#define SysOpt3_Value		0XA5//0xA5
+#define SysOpt4_Value		0x62
+#define SysOpt5_Value		0xCF
+#define SysOpt6_Value		0X88//0x88
+#define SysOpt7_Value		0X26//0xE6	
+#define SysOpt8_Value		0X10//0x14
+#define SysOpt9_Value		0X7F//0x7F	

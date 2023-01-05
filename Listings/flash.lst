@@ -1,0 +1,336 @@
+C51 COMPILER V9.60.0.0   FLASH                                                             12/19/2022 10:49:28 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE FLASH
+NO OBJECT MODULE REQUESTED
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\flash.c LARGE OPTIMIZE(4,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
+                    -stings\flash.lst) TABS(2) SRC(.\Objects\flash.SRC)
+
+line level    source
+
+   1          #define FLASH_GLOBALS
+   2          
+   3          #define   MyDef extern
+   4          
+   5          
+   6          #include  "A94B114.h"
+   7          #include "flash.h"
+   8          #include  "func_def.h"
+   9          
+  10          #define PGM_TIME 0x9D // 2.5ms
+  11          #define NOP _nop_()
+  12          
+  13          #define PAGEBUF_SIZE 32
+  14          #define coderom ((unsigned char volatile code  *) 0)
+  15          #define DUMMY_FLASH_ADDRESS 0x600     // Set a dummy write area within the protection zone.
+  16          
+  17          #define FLASH_WRITE_SECURITY_ID   0xF0
+  18          #define FLASH_ERASE_SECURITY_ID   0xE0
+  19          
+  20          // Do not change this define.
+  21          // code_buf, g_FEMR, g_FECR, g_WDTMR must be data area. (Do not define at xdata area or idata.)
+  22          volatile unsigned char data code_buf[20] _at_ 0x30;   // Lower 128bytes internal RAM. (GPR Address 0x30~0x7
+             -F)
+  23          volatile unsigned char data g_FEMR, g_FECR, g_WDTMR;
+  24          volatile unsigned char data g_IE, g_IE1, g_IE2;
+  25          //==============================================================================
+  26          // Sram-jump Program Routine.
+  27          //==============================================================================
+  28          // must execute in SRAM!, 0 ~ 0x11(code size : 18 byte)
+  29          // Do not change this routine.
+  30          volatile void write_page_buffer_src()   
+  31          {
+  32   1          FEMR = FLASH_SEL                |   // FSEL (Select Flash memory)
+  33   1                 FLASH_PBUFF_SEL          |   // PBUFF (Select page buffer)
+  34   1                 FLASH_CON_ENABLE         ;   // FEEN (Enable program & erase)
+  35   1      
+  36   1        #pragma asm
+  37   1          mov   r0,#32
+  38   1          mov   dptr,#0x10E0  ; page buffer address
+  39   1          write_page_buffer_src_loop:
+  40   1          mov   a, @r1
+  41   1          movx  @dptr,a
+  42   1          inc   r1
+  43   1          inc   dptr        
+  44   1          djnz  r0,write_page_buffer_src_loop
+  45   1        #pragma endasm
+  46   1      
+  47   1          FEMR = 0;
+  48   1      }
+  49          
+  50          // must execute in SRAM!, 0 ~ 0x0E(code size : 15 byte)
+  51          // Do not change this routine.
+  52          volatile void do_flash_at_sram_src()    
+  53          {
+C51 COMPILER V9.60.0.0   FLASH                                                             12/19/2022 10:49:28 PAGE 2   
+
+  54   1        #pragma asm
+  55   1          mov FEMR,g_FEMR       // 3 byte
+  56   1          mov FECR,g_FECR       // 3 byte
+  57   1        _flash_busy_wait:
+  58   1          mov A,FESR          // 2 byte
+  59   1          JNB ACC.7,_flash_busy_wait  // 3 byte
+  60   1          clr A           // 1 byte
+  61   1          mov FEMR,A          // 2 byte
+  62   1        #pragma endasm
+  63   1      // C source
+  64   1      //     FEMR = g_FEMR;
+  65   1      //     FECR = g_FECR;
+  66   1      //     while( !(FESR & 0x80) );
+  67   1      //     FEMR = 0;
+  68   1      } // RET // 1byte
+  69          //==============================================================================
+  70          void Flash_Enter()
+  71          {
+  72   1        cli();        // Global Interrupt Disable
+  73   1        g_IE = IE;
+  74   1        g_IE1 = IE1;
+  75   1        g_IE2 = IE2; 
+  76   1        g_WDTMR = WDTMR;  // Backup WDTMR
+  77   1        WDTMR = 0;    // Watch Dog Timer Stop.
+  78   1        g_WDTMR |= 0x04;  // Clear WDT Counter
+  79   1        
+  80   1        // To access Flash Control register, ENTRY_0~2 should be set 0xAA, 0x55, 0xA5.
+  81   1        *(unsigned char xdata *)0x10D8 = 0xAA;
+  82   1          *(unsigned char xdata *)0x10DA = 0x55;
+  83   1          *(unsigned char xdata *)0x10DD = 0xA5;
+  84   1        
+  85   1        FEARL = (unsigned char)( DUMMY_FLASH_ADDRESS & 0xff);
+  86   1        FEARM = (unsigned char)(( DUMMY_FLASH_ADDRESS >> 8) & 0xff);
+  87   1        FEARH = 0;
+  88   1        
+  89   1      }
+  90          
+  91          void Flash_Exit()
+  92          {
+  93   1        FECR = FLASH_MODE_EXIT;
+  94   1        
+  95   1        FEARL = (unsigned char)( DUMMY_FLASH_ADDRESS & 0xff);
+  96   1        FEARM = (unsigned char)(( DUMMY_FLASH_ADDRESS >> 8) & 0xff);
+  97   1        FEARH = 0;
+  98   1        
+  99   1        // After to change Flash Control register, ENTRY_0~2 should be set 0x00.
+ 100   1        *(unsigned char xdata *)0x10D8 = 0x00;
+ 101   1          *(unsigned char xdata *)0x10DA = 0x00;
+ 102   1          *(unsigned char xdata *)0x10DD = 0x00;
+ 103   1        
+ 104   1        // Flash code buffer ram clear.
+ 105   1      #pragma asm
+ 106   1        mov   r0, #code_buf
+ 107   1        mov   r2, #20
+ 108   1        clr   a
+ 109   1      loop0:
+ 110   1        mov   @r0, a
+ 111   1        inc   r0
+ 112   1        djnz  r2, loop0
+ 113   1      #pragma endasm
+ 114   1      
+ 115   1        WDTMR = g_WDTMR;  // Restore WDTMR
+C51 COMPILER V9.60.0.0   FLASH                                                             12/19/2022 10:49:28 PAGE 3   
+
+ 116   1         IE = g_IE;
+ 117   1        IE1 = g_IE1;
+ 118   1        IE2 = g_IE2; 
+ 119   1        sei();        // Global Interrupt Enable
+ 120   1      }
+ 121          
+ 122          
+ 123          void write_page_buffer(unsigned char *dt) // dt -> r3, r2, r1 
+ 124          {
+ 125   1        unsigned char *temp = dt;
+ 126   1        
+ 127   1          #pragma asm
+ 128   1          mov   dptr,#write_page_buffer_src
+ 129   1          mov   r0,#0x30
+ 130   1              mov   r2,#0x12
+ 131   1        write_page_buffer_loop:
+ 132   1          clr   a
+ 133   1          movc  a,@a+dptr
+ 134   1          mov   @r0,a
+ 135   1          inc   dptr
+ 136   1          inc   r0
+ 137   1          djnz  r2,write_page_buffer_loop
+ 138   1              ljmp  0x8030    ; jump sram region
+ 139   1          #pragma endasm
+ 140   1      }
+ 141          
+ 142          #if 0
+              void do_flash_at_sram()
+              {
+                  #pragma asm
+                  mov   dptr,#do_flash_at_sram_src
+                  mov   r0,#0x30
+                  mov   r1,#0x0F
+                do_flash_at_sram_loop:
+                  clr   a
+                  movc  a,@a+dptr
+                  mov   @r0,a
+                  inc   dptr
+                  inc   r0
+                  djnz  r1,do_flash_at_sram_loop
+                  ljmp  0x8030
+                  #pragma endasm
+              }
+              #else
+ 160          void do_flash_at_sram()
+ 161          {
+ 162   1        unsigned char code *ptr;    //need to add "code"
+ 163   1        unsigned char temp=0, i;
+ 164   1      
+ 165   1        ptr=(unsigned char code*)do_flash_at_sram_src;
+ 166   1        //temp=sizeof(int);
+ 167   1        for(i=0; i<15;i++)  //**size of "do_flash_at_sram_src" is less than 32.
+ 168   1        {
+ 169   2          code_buf[i]=ptr[i];
+ 170   2        }
+ 171   1      //  ljmp_code_buf();    //Jump 0x8030
+ 172   1        #pragma asm
+ 173   1          ljmp  0x8030    ;FLASH Writing Start
+ 174   1        #pragma endasm
+ 175   1        
+ 176   1      }
+ 177          #endif
+C51 COMPILER V9.60.0.0   FLASH                                                             12/19/2022 10:49:28 PAGE 4   
+
+ 178          char Flash_Erase(unsigned int addr)
+ 179          {
+ 180   1        unsigned int i;
+ 181   1        unsigned char flash_state_id = FLASH_ERASE_SECURITY_ID;
+ 182   1        
+ 183   1        // Flash Flash Control Register CLR change before initialization.
+ 184   1        FECR  = 0;
+ 185   1        FETCR = 0;
+ 186   1        FEMR  = 0; 
+ 187   1        
+ 188   1        // Enable program mode
+ 189   1        Flash_Enter();
+ 190   1      
+ 191   1        FETCR = PGM_TIME;       // 0x9D = 157 : (157+1) * 2 (31.25ns * 256) = 2.528ms
+ 192   1        FECR = FLASH_PBUFF_RESET;
+ 193   1      
+ 194   1        g_FEMR = FLASH_SEL        |
+ 195   1             FLASH_ERASE_MODE     |
+ 196   1             FLASH_CON_ENABLE     ;
+ 197   1      
+ 198   1        g_FECR = FLASH_START_ERASE_PGM  ;
+ 199   1        
+ 200   1        FEARL = (unsigned char)(addr&0xff);
+ 201   1        FEARM = (unsigned char)((addr>>8)&0xff);
+ 202   1        FEARH = 0;
+ 203   1        
+ 204   1        if(flash_state_id != FLASH_ERASE_SECURITY_ID)
+ 205   1        {
+ 206   2          Flash_Exit();
+ 207   2          WDTMR = 0;      // If Flash ID fail, may be WDTMR value error.
+ 208   2          
+ 209   2          return -1;
+ 210   2        }
+ 211   1        
+ 212   1        do_flash_at_sram();
+ 213   1       
+ 214   1        Flash_Exit();
+ 215   1        
+ 216   1        // read data  
+ 217   1        for(i=0; i<PAGEBUF_SIZE;i++){ // Read flash data.
+ 218   2          if(coderom[addr] != 0x00) 
+ 219   2                return -1;
+ 220   2      
+ 221   2          addr++;
+ 222   2        }
+ 223   1        return 0;
+ 224   1      }
+ 225          
+ 226          char Flash_Write(unsigned int addr, unsigned char *dt)
+ 227          {
+ 228   1        unsigned int i;
+ 229   1        unsigned char *pdt;
+ 230   1        unsigned char flash_state_id = FLASH_WRITE_SECURITY_ID;
+ 231   1        
+ 232   1        // Enable program mode
+ 233   1        Flash_Enter();
+ 234   1        
+ 235   1        FETCR = PGM_TIME;       // 0x9D = 157 : (157+1) * 2 (31.25ns * 256) = 2.528ms
+ 236   1      
+ 237   1          // 0x81
+ 238   1          FEMR = FLASH_SEL                | // FSEL (Select Flash memory)
+ 239   1                 FLASH_CON_ENABLE         ; // FEEN (Enable program & erase of Flash)
+C51 COMPILER V9.60.0.0   FLASH                                                             12/19/2022 10:49:28 PAGE 5   
+
+ 240   1      
+ 241   1          // 
+ 242   1          FECR = FLASH_PBUFF_RESET        ; // PBRSTB (Reset page buffer)
+ 243   1      
+ 244   1        FEARL = (unsigned char)(addr&0xff);
+ 245   1        FEARM = (unsigned char)((addr>>8)&0xff);
+ 246   1        FEARH = 0x00;
+ 247   1      
+ 248   1          write_page_buffer(dt);
+ 249   1      
+ 250   1         // 0xA1
+ 251   1          g_FEMR = FLASH_SEL         |    // FSEL (Select Flash memory)
+ 252   1                   FLASH_PGM_MODE    |    // PGM (Enable program or verify mode with VFY)
+ 253   1                   FLASH_CON_ENABLE;      // FEEN (Enable program & erase of Flash)
+ 254   1      
+ 255   1          // 0x0B
+ 256   1          g_FECR = FLASH_START_ERASE_PGM;   // WRITE (Start program or erase)
+ 257   1                          // FERSTB (Reset Flash and EEPROM)
+ 258   1                          // PBRSTB (Reset page buffer)
+ 259   1        
+ 260   1        if(flash_state_id != FLASH_WRITE_SECURITY_ID)
+ 261   1        {
+ 262   2          Flash_Exit();
+ 263   2          WDTMR = 0;            // If Flash ID fail, may be WDTMR value error.
+ 264   2          
+ 265   2          return -1;
+ 266   2        }
+ 267   1        
+ 268   1          do_flash_at_sram();
+ 269   1       
+ 270   1        Flash_Exit();
+ 271   1        
+ 272   1        // read data
+ 273   1        pdt = dt;
+ 274   1        for(i=0;i<PAGEBUF_SIZE;i++)   // Read flash data.
+ 275   1        { 
+ 276   2          if (coderom[addr]!=*pdt) 
+ 277   2              return -2;
+ 278   2          
+ 279   2          addr++;
+ 280   2          pdt++;
+ 281   2        }
+ 282   1        
+ 283   1        return 0;
+ 284   1      }
+ 285          
+ 286          char Flash_Read(unsigned int addr, unsigned char *dt, unsigned char length)
+ 287          {
+ 288   1        unsigned int i;
+ 289   1        unsigned char *pdt;
+ 290   1        
+ 291   1        // read data
+ 292   1        pdt = dt;
+ 293   1        for(i=addr; i<(addr+length); i++) // Read flash data.
+ 294   1        {
+ 295   2          *pdt = coderom[i];
+ 296   2          pdt++;
+ 297   2        }
+ 298   1        
+ 299   1        return 0;
+ 300   1      }
+ 301          
+C51 COMPILER V9.60.0.0   FLASH                                                             12/19/2022 10:49:28 PAGE 6   
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    654    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      22
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

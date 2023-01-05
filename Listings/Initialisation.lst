@@ -1,0 +1,172 @@
+C51 COMPILER V9.60.0.0   INITIALISATION                                                    12/19/2022 10:49:27 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE INITIALISATION
+OBJECT MODULE PLACED IN .\Objects\Initialisation.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\Initialisation.c LARGE OPTIMIZE(4,SPEED) BROWSE DEBUG OBJECTEXTEND P
+                    -RINT(.\Listings\Initialisation.lst) TABS(2) OBJECT(.\Objects\Initialisation.obj)
+
+line level    source
+
+   1          //======================================================
+   2          // peripheral setting routines
+   3          //======================================================
+   4          
+   5          #include  "A94B114.h"
+   6          #include  "func_def.h"
+   7          
+   8          //======================================================
+   9          // peripheral setting routines
+  10          //======================================================
+  11          void ADC_init()
+  12          {
+  13   1        // initialize A/D convertor
+  14   1        ADCM = 0x28;      // setting // 20
+  15   1        ADCM1 = 0x0E;     // trigger source, alignment, frequency
+  16   1        IE2 |= 0x01;      // enable ADC interrupt
+  17   1        LDOCR = 0x01;
+  18   1      }
+  19          
+  20          void ADC_start(unsigned char ch)
+  21          {
+  22   1        // start A/D convertor
+  23   1        ADCM = (ADCM & 0xf0) | (ch & 0xf);  // select channel
+  24   1        ADCM |= 0x40;     // start ADC
+  25   1      }
+  26          
+  27          
+  28          void ExINT_init()
+  29          {
+  30   1        // initialize external interrupt
+  31   1        EIPOL0 = 0x02;    // polarity 10 ~ 12
+  32   1        EIPOL1 = 0x00;    // polarity 0 ~ 2
+  33   1        IE |= 0x02;       // enable Ext. INT. 10
+  34   1      }
+  35          
+  36          void LVI_init()
+  37          {
+  38   1        // initialize LVI, LVR
+  39   1        LVIR = 0x21;      // set LVI & LVR
+  40   1        DBTSR = 0x00;     // set debounce
+  41   1        IE2 |= 0x08;      // Enable LVI interrupt
+  42   1      }
+  43          
+  44          void LVI_De_init()
+  45          {
+  46   1        // Disable LVI, LVR
+  47   1        LVIR = 0x00;      // set LVI & LVR
+  48   1        DBTSR = 0x00;     // set debounce
+  49   1        IE2 &= ~0x08;     // Enable LVI interrupt
+  50   1      }
+  51          
+  52          void Timer0_init()
+  53          {
+  54   1        // initialize Timer0
+C51 COMPILER V9.60.0.0   INITIALISATION                                                    12/19/2022 10:49:27 PAGE 2   
+
+  55   1        // 8bit timer, period = 0.25000mS
+  56   1        T0CR = 0x07;      // fx/32
+  57   1        T0DR = 0x7C;      // period count= 125
+  58   1      
+  59   1        IE1 |= 0x10;      // Enable Timer interrupt
+  60   1        T0CR |= 0x80;     // enable timer
+  61   1      }
+  62          
+  63          void Timer1_init()
+  64          {
+  65   1        // initialize Timer1
+  66   1        // 16bit timer, period = 499.968000mS
+  67   1        T1CRH = 0x00;     // timer disable
+  68   1        T1CRL = 0x01;     // fx/2048
+  69   1        //T1CRL = 0x04;   // Timer output polarity start Low
+  70   1        T1ADRH = 0x0F;    // counter value = 3907
+  71   1        T1ADRL = 0x43;
+  72   1        IE1 |= 0x20;      // Enable Timer interrupt
+  73   1        T1CRH |= 0x80;    // enable timer
+  74   1      }
+  75          
+  76          
+  77          void clock_init()
+  78          {
+  79   1        BITCR = 0x84;
+  80   1        WDTMR = 0x00;
+  81   1        SYSCON_AR = 0x5A; // Enable permission to access SCCR
+  82   1      
+  83   1        // internal RC clock (16.0MHz)
+  84   1        OSCCR = 0x04;     // Set High freq. OSC
+  85   1        SCCR = 0x40;
+  86   1        wait_100uSec(NOP_COUNT/2);
+  87   1        OSCCR = 0x04;
+  88   1        SYSCON_AR = 0x00; // Disable permission
+  89   1        WDTMR = 0x38;
+  90   1      }
+  91          
+  92          void port_init()
+  93          {
+  94   1        // initialize ports
+  95   1        //   2 : PWM2o    out speed control
+  96   1        //  12 : P05      out 
+  97   1        //  15 : EINT10   in  ir remote
+  98   1        P0IO = 0xFB;      // direction
+  99   1        P0PU = 0x00;      // pullup
+ 100   1        P0OD = 0x00;      // open drain
+ 101   1        P0DB = 0x00;      // debounce
+ 102   1        P0   = 0x00;      // port initial value
+ 103   1      
+ 104   1        P1IO = 0xF7;      // direction
+ 105   1        P1PU = 0x00;      // pullup
+ 106   1        P1OD = 0x00;      // open drain
+ 107   1        P1DB = 0x00;      // debounce
+ 108   1        P1   = 0x00;      // port initial value
+ 109   1      
+ 110   1        P2IO = 0xF0;      // direction
+ 111   1        P2PU = 0x00;      // pullup
+ 112   1        P2OD = 0x00;      // open drain
+ 113   1        P2DB = 0x00;      // debounce
+ 114   1        P2   = 0x00;      // port initial value
+ 115   1      
+ 116   1        // Set port functions
+C51 COMPILER V9.60.0.0   INITIALISATION                                                    12/19/2022 10:49:27 PAGE 3   
+
+ 117   1        P0FSRL = 0x30;    // P03~00
+ 118   1        P0FSRH = 0x00;    // P07~04
+ 119   1        P1FSRL = 0x02;    // P13~10
+ 120   1        P1FSRH = 0x00;    // P17~14
+ 121   1        P2FSR = 0x70;     // P23~20
+ 122   1      }
+ 123          
+ 124          void  Nop_1us_16Mhz(void)
+ 125          {
+ 126   1        NOP; NOP; NOP; NOP; // NOP = 62.6ns(@16Mhz) 62.5ns * 16 = 1us
+ 127   1        NOP; NOP; NOP; NOP;
+ 128   1        NOP; NOP; //NOP; NOP; // LCALL = 2 clock
+ 129   1        //NOP; NOP; NOP; NOP; // RET = 4 clock
+ 130   1      }
+ 131          
+ 132          void  wait_100uSec(unsigned int delay)
+ 133          {
+ 134   1        register unsigned int i;
+ 135   1      
+ 136   1        for( i = 0; i < (delay*10); i++)
+ 137   1        {
+ 138   2          Nop_1us_16Mhz();
+ 139   2          Nop_1us_16Mhz();
+ 140   2          Nop_1us_16Mhz();
+ 141   2          Nop_1us_16Mhz();
+ 142   2        }
+ 143   1      }
+ 144          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    232    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       2
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
