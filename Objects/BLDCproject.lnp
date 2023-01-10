@@ -9,5 +9,5 @@
 ".\Objects\I2C.obj" 
 TO ".\Objects\BLDCproject" 
 PRINT(".\Listings\BLDCproject.m51") RAMSIZE(256) 
-CODE( 0X0000-0XFFFF )
+CODE( 0X0000-0X1FFF )
 XDATA( 0X0000-0X01FF )

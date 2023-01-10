@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.0.0   MAIN                                                              12/19/2022 10:49:28 PAGE 1   
+C51 COMPILER V9.60.0.0   MAIN                                                              01/04/2023 16:06:19 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
 OBJECT MODULE PLACED IN .\Objects\main.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\main.c LARGE OPTIMIZE(4,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Lis
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\main.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Lis
                     -tings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
 
 line level    source
@@ -21,466 +21,513 @@ line level    source
   11          #include "flash.h"
   12          #include  "func_def.h"
   13          #include  "MotorPara.h"
-  14          
-  15          extern unsigned char RemotePress,SleepTimerCompleteFlag_1hr,SleepTimerStartFlag_1hr,TimerStartFlag,LowVolt
+  14          //#include    "Intrins.h"
+  15          //#include    "delay.h"     //
+  16          //#include "a94b114_gpio.h"
+  17          //#include "a94b114_clock.h"
+  18          //#include "a94b114_usart.h"
+  19          
+  20          extern unsigned char RemotePress,SleepTimerCompleteFlag_1hr,SleepTimerStartFlag_1hr,TimerStartFlag,LowVolt
              -ageResetFlag,Timer_Counter_Complete_Flag;
-  16          unsigned char Command,LED_blink_Counter,LED_blink_Status,Fan_load_Healthy=1;
-  17          extern unsigned int Timer5min,TimerHrsValue;
-  18          extern long NewKey,SleepTimerCounter_1hr,General_Counter;
-  19          extern xdata unsigned int ADC_Value;
-  20          extern xdata unsigned int Fan_load_unhealthy_Counter;
-  21          unsigned char OnceProgrameFlag,OneSecTimer;
-  22          //struct variable var;
-  23          struct RemoteStatus RemoteData;
-  24          
-  25          xdata unsigned char Fan_load_helathy_count,Fan_load_healthy_once_flag;
-  26          
-  27          void main()
-  28          {
-  29   1        unsigned char Var_Data[14];
-  30   1        cli();            // disable INT. during peripheral setting
-  31   1        port_init();      // initialize ports
-  32   1        clock_init();     // initialize operation clock
-  33   1        ExINT_init();     // initialize external interrupt
-  34   1        Timer0_init();    // initialize Timer0
-  35   1        Timer1_init();    // initialize Timer1
-  36   1        ADC_init();       // initialize A/D convertor
-  37   1        
-  38   1        P2IO |= 0x03;
-  39   1        P2PU |= 0x03;     // pullup
-  40   1        P2 |= 0X03;
-  41   1        I2C_Parameter_syllergy();
-  42   1        I2C_Motor_Start();
-  43   1        P2IO &= ~0x03;
-  44   1        P2PU &= ~0X03;
-  45   1        Flash_Read(TEST_WRITE_ADDRESS, &OnceProgrameFlag, 1);
-  46   1        if(OnceProgrameFlag != 0xAA)
-  47   1        {
-  48   2          RemoteData.Power = 1;
-  49   2          RemoteData.Light = 0;
-  50   2          RemoteData.FanSpeed = 5;
-  51   2          RemoteData.Timer_Hrs = 0;
-  52   2          RemoteData.Sleep = 0;
-  53   2          test_self_PGM();
-C51 COMPILER V9.60.0.0   MAIN                                                              12/19/2022 10:49:28 PAGE 2   
+  21          unsigned char Command,LED_blink_Counter,LED_blink_Status,Fan_load_Healthy=1;
+  22          extern unsigned int Timer5min,TimerHrsValue;
+  23          extern long NewKey,SleepTimerCounter_1hr,General_Counter;
+  24          extern xdata unsigned int ADC_Value;
+  25          extern xdata unsigned int Fan_load_unhealthy_Counter;
+  26          unsigned char OnceProgrameFlag,OneSecTimer;
+  27          //struct variable var;
+  28          struct RemoteStatus RemoteData;
+  29          xdata unsigned char Fan_load_helathy_count,Fan_load_healthy_once_flag;
+  30          
+  31          //void putstring(char *str)
+  32          //{
+  33          //  while(*str != 0)
+  34          //    USART_SendDataWithInterrupt(*str++);
+  35          //}
+  36          unsigned char Sleep_Data = 0;
+  37          
+  38          void main()
+  39          {
+  40   1        unsigned char Var_Data[14];
+  41   1        cli();            // disable INT. during peripheral setting
+  42   1        port_init();      // initialize ports
+  43   1        //LED_Init
+  44   1        P0IO |= (1<<5);
+  45   1        
+  46   1        clock_init();     // initialize operation clock
+  47   1        ExINT_init();     // initialize external interrupt
+  48   1        P2PU |= 0x0C;
+  49   1        P2 |= 0x0C;
+  50   1        Timer0_init();    // initialize Timer0
+  51   1        Timer1_init();    // initialize Timer1
+  52   1        ADC_init();       // initialize A/D convertor
+  53   1      
+C51 COMPILER V9.60.0.0   MAIN                                                              01/04/2023 16:06:19 PAGE 2   
 
-  54   2        }
-  55   1        else
-  56   1        {
-  57   2          Flash_Read(TEST_WRITE_ADDRESS, &Var_Data, 14);
-  58   2          RemoteData.Power = Var_Data[1];
-  59   2          RemoteData.Light = Var_Data[2];
-  60   2          RemoteData.FanSpeed = Var_Data[3];
-  61   2          RemoteData.Timer_Hrs = Var_Data[4];
-  62   2          RemoteData.Sleep = Var_Data[5]; 
-  63   2          General_Counter = (Var_Data[6]) | (Var_Data[7]<<8) | (Var_Data[8]<<16) | (Var_Data[9]<<24);
-  64   2          SleepTimerCounter_1hr = (Var_Data[10]) | (Var_Data[11]<<8) | (Var_Data[12]<<16) | (Var_Data[13]<<24);
-  65   2        }
-  66   1        LVI_init();       // initialize LVI, LVR
-  67   1        sei(); 
-  68   1        if(RemoteData.Light)
-  69   1        {
-  70   2          LED_ON;
-  71   2        }
-  72   1        // enable INT.
-  73   1        SystemInitialization();
-  74   1        // TODO: add your main code here
-  75   1        
-  76   1        while(1)
-  77   1        {
-  78   2      //    if(Fan_load_Healthy)
-  79   2      //    {
-  80   2      //      Fan_load_Line_Monitor();
-  81   2      //    }
-  82   2      //    if((Fan_load_Healthy == 0) && (Fan_load_unhealthy_Counter >= FAN_LOAD_UNHELATHY_STABLIZING_TIME))
-  83   2      //    {
-  84   2      //      Fan_load_Line_Monitor();
-  85   2      //      Fan_load_unhealthy_Counter = 0;
-  86   2      //    }
-  87   2          if(RemotePress)
-  88   2          {
-  89   3            Command = RemoteGetKeyProcess(NewKey);
-  90   3            //RemotePress = 0;
-  91   3            NewKey = 0;
-  92   3            LED_blink_Counter = 0;
-  93   3            LED_blink_Status = 0;
-  94   3            OneSecTimer = 0;
-  95   3            LED_OFF;
-  96   3            process();
-  97   3            RemotePress = 0;
-  98   3            Fan_load_healthy_once_flag = 0;
-  99   3            LVI_De_init();
- 100   3            test_self_PGM();
- 101   3            LVI_init();
- 102   3          }
- 103   2          if((RemoteData.Sleep)&&(SleepTimerCompleteFlag_1hr))
- 104   2          {
- 105   3            SleepOperation();
- 106   3            LVI_De_init();
- 107   3            test_self_PGM();
- 108   3            LVI_init();
- 109   3          }
- 110   2          if((SleepTimerStartFlag_1hr) || (TimerStartFlag))
- 111   2          {
- 112   3            if(Timer5min >= TIMER_5_MINUTES)
- 113   3            {
- 114   4              //write flash
- 115   4              //test_self_PGM();
-C51 COMPILER V9.60.0.0   MAIN                                                              12/19/2022 10:49:28 PAGE 3   
+  54   1      //  #ifdef DEBUG
+  55   1      //    /*Set Alernative Function for USART P14(RX) / P5(TX)*/
+  56   1      //    Port_SetAlterFunctionpin(PORT1, PIN4, 0x1);
+  57   1      //    Port_SetAlterFunctionpin(PORT1, PIN5, 0x1);
+  58   1      //    
+  59   1      
+  60   1      //    USART_Initial(9600, USART_DATA_8BIT, USART_STOP_1BIT, USART_PARITY_NO, USART_TX_RX_MODE);
+  61   1      //    
+  62   1      ////    USART_ConfigureInterrupt(USART_RX_COMPLETE_INT, TRUE);
+  63   1      //    USART_ConfigureInterrupt(USART_TX_COMPLETE_INT, TRUE);
+  64   1      //  #endif  //DEBUG
+  65   1        P2IO |= 0x03;
+  66   1        P2PU |= 0x03;     // pullup
+  67   1        P2 |= 0X03;
+  68   1        I2C_Parameter_syllergy();
+  69   1        I2C_Motor_Start();
+  70   1        P2IO &= ~0x03;
+  71   1        P2PU &= ~0X03;
+  72   1        
+  73   1      //  LVI_De_init();
+  74   1      //  test_self_PGM();
+  75   1      //  LVI_init();
+  76   1      //  OnceProgrameFlag = 0x00;
+  77   1        Flash_Read(TEST_WRITE_ADDRESS, &OnceProgrameFlag, 1);
+  78   1        if(OnceProgrameFlag != 0xAA)
+  79   1        {
+  80   2          RemoteData.Power = 1;
+  81   2          RemoteData.Light = 0;
+  82   2          RemoteData.FanSpeed = 0;//    RemoteData.FanSpeed = 5;Sunil need to change 0 to 5.
+  83   2      
+  84   2          RemoteData.Timer_Hrs = 0;
+  85   2          RemoteData.Sleep = 0;
+  86   2          test_self_PGM();
+  87   2        }
+  88   1        else
+  89   1        {
+  90   2          Flash_Read(TEST_WRITE_ADDRESS, &Var_Data, 14);
+  91   2          RemoteData.Power = Var_Data[1];
+  92   2          RemoteData.Light = Var_Data[2];
+  93   2          RemoteData.FanSpeed = Var_Data[3];
+  94   2          RemoteData.Timer_Hrs = Var_Data[4];
+  95   2          RemoteData.Sleep = Var_Data[5]; 
+  96   2          General_Counter = (Var_Data[6]) | (Var_Data[7]<<8) | (Var_Data[8]<<16) | (Var_Data[9]<<24);
+  97   2          SleepTimerCounter_1hr = (Var_Data[10]) | (Var_Data[11]<<8) | (Var_Data[12]<<16) | (Var_Data[13]<<24);
+  98   2        }
+  99   1        LVI_init();       // initialize LVI, LVR
+ 100   1        WDTMR = 0x00;
+ 101   1        sei(); 
+ 102   1        if(RemoteData.Light)
+ 103   1        {
+ 104   2          LED_ON;
+ 105   2          
+ 106   2        }
+ 107   1        // enable INT.
+ 108   1        SystemInitialization();
+ 109   1      //  putstring("a94b114 USART INTERRUPT TEST!!\n");
+ 110   1      
+ 111   1        // TODO: add your main code here
+ 112   1      //  LED_ON;
+ 113   1        while(1)
+ 114   1        {
+ 115   2      
+C51 COMPILER V9.60.0.0   MAIN                                                              01/04/2023 16:06:19 PAGE 3   
 
- 116   4              Timer5min = 0;
- 117   4            }
- 118   3          }
- 119   2          if(Timer_Counter_Complete_Flag)
- 120   2          {
- 121   3            LED_blink_Counter = 2;
- 122   3            LED_blink_Status = 1;
- 123   3            fan_power_off();
- 124   3            //i2c_speed(FAN_OFF_VALUE);
- 125   3            Timer_Counter_Complete_Flag = 1;
- 126   3            RemoteData.Power = 0;
- 127   3            RemoteData.Timer_Hrs = REMOTE_TIMER_OFF;
- 128   3            TimerStartFlag = 0;
- 129   3            General_Counter = 0;
- 130   3            TimerHrsValue = 0;
- 131   3            Timer_Counter_Complete_Flag = 0;
- 132   3          }
- 133   2          if(LowVoltageResetFlag)
- 134   2          {
- 135   3            
- 136   3            //LVI_De_init();
- 137   3            //test_self_PGM();
- 138   3            LowVoltageResetFlag = 0;
- 139   3            //LVI_init();
+ 116   2      //    if(Fan_load_Healthy)
+ 117   2      //    {
+ 118   2      //      Fan_load_Line_Monitor();
+ 119   2      //    }
+ 120   2      //    if((Fan_load_Healthy == 0) && (Fan_load_unhealthy_Counter >= FAN_LOAD_UNHELATHY_STABLIZING_TIME))
+ 121   2      //    {
+ 122   2      //      Fan_load_Line_Monitor();
+ 123   2      //      Fan_load_unhealthy_Counter = 0;
+ 124   2      //    }
+ 125   2          if(RemotePress)
+ 126   2          {
+ 127   3            Command = RemoteGetKeyProcess(NewKey);
+ 128   3            //RemotePress = 0;
+ 129   3            NewKey = 0;
+ 130   3            LED_blink_Counter = 0;
+ 131   3            LED_blink_Status = 0;
+ 132   3            OneSecTimer = 0;
+ 133   3            LED_OFF;
+ 134   3            process();
+ 135   3            RemotePress = 0;
+ 136   3            Fan_load_healthy_once_flag = 0;
+ 137   3            LVI_De_init();
+ 138   3            test_self_PGM();
+ 139   3            LVI_init();
  140   3          }
- 141   2        }
- 142   1      }
- 143          
- 144          void process()
- 145          {
- 146   1        switch(Command)
- 147   1        {
- 148   2          case POWER:
- 149   2            //OPERTION
- 150   2            fan_power_on();
- 151   2            break;
- 152   2          /*case LIGHT:
- 153   2            //OPERTION
- 154   2            if(RemoteData.Light)
- 155   2            {
- 156   2              RemoteData.Light = 0;
- 157   2              LED_OFF;
- 158   2            }
- 159   2            else
- 160   2            {
- 161   2              RemoteData.Light = 1;
- 162   2              LED_ON;
- 163   2            }
- 164   2            Command = 0;        
- 165   2            break; */
- 166   2          case FAN_SPEED_1:
- 167   2            //OPERTION
- 168   2            if(!RemoteData.Sleep)
- 169   2              {   
- 170   3                fanSpeed1();
- 171   3              }
- 172   2            Command = 0;        
- 173   2            break;
- 174   2          case FAN_SPEED_2:
- 175   2            //OPERTION
- 176   2            if(!RemoteData.Sleep)
- 177   2              {   
-C51 COMPILER V9.60.0.0   MAIN                                                              12/19/2022 10:49:28 PAGE 4   
+ 141   2      //    if((RemoteData.Sleep)&&(SleepTimerCompleteFlag_1hr))
+ 142   2      //    {
+ 143   2      //      SleepOperation();
+ 144   2      //      LVI_De_init();
+ 145   2      //      test_self_PGM();
+ 146   2      //      LVI_init();
+ 147   2      //    }
+ 148   2      //    if((SleepTimerStartFlag_1hr) || (TimerStartFlag))
+ 149   2      //    {
+ 150   2      //      if(Timer5min >= TIMER_5_MINUTES)
+ 151   2      //      {
+ 152   2      //        //write flash
+ 153   2      //        //test_self_PGM();
+ 154   2      //        Timer5min = 0;
+ 155   2      //      }
+ 156   2      //    }
+ 157   2          if(Timer_Counter_Complete_Flag)
+ 158   2          {
+ 159   3      //      LED_blink_Counter = 2;  //Sunil need to uncommand
+ 160   3      //      LED_blink_Status = 1;   //Sunil need to uncommand
+ 161   3            LED_ON;
+ 162   3            fan_power_off();
+ 163   3            //i2c_speed(FAN_OFF_VALUE);
+ 164   3      //      Timer_Counter_Complete_Flag = 1;
+ 165   3            RemoteData.Power = 0;
+ 166   3            RemoteData.Timer_Hrs = REMOTE_TIMER_OFF;
+ 167   3            TimerStartFlag = 0;
+ 168   3            General_Counter = 0;
+ 169   3            TimerHrsValue = 0;
+ 170   3            Timer_Counter_Complete_Flag = 0;
+ 171   3          }
+ 172   2          if(LowVoltageResetFlag)
+ 173   2          {
+ 174   3            
+ 175   3            //LVI_De_init();
+ 176   3            //test_self_PGM();
+ 177   3            LowVoltageResetFlag = 0;
+C51 COMPILER V9.60.0.0   MAIN                                                              01/04/2023 16:06:19 PAGE 4   
 
- 178   3                fanSpeed2();
- 179   3              }
- 180   2            Command = 0;  
- 181   2            break;
- 182   2          case FAN_SPEED_3:
- 183   2            //OPERTION
- 184   2            if(!RemoteData.Sleep)
- 185   2              {   
- 186   3                fanSpeed3();
- 187   3              }
- 188   2            Command = 0;  
- 189   2            break;
- 190   2          case FAN_SPEED_4:
- 191   2            //OPERTION      
- 192   2            if(!RemoteData.Sleep)
- 193   2              {   
- 194   3                fanSpeed4();
- 195   3              }
- 196   2            Command = 0;  
- 197   2            break;
- 198   2          case FAN_SPEED_5:
- 199   2            //OPERTION
- 200   2            if(!RemoteData.Sleep)
- 201   2              {   
- 202   3                fanSpeed5();
- 203   3              }
- 204   2            Command = 0;  
- 205   2            break;
- 206   2          case FAN_SPEED_6:
- 207   2            //OPERTION
- 208   2            if(!RemoteData.Sleep)
- 209   2              {   
- 210   3                fanSpeed6();
+ 178   3            //LVI_init();
+ 179   3          }
+ 180   2        }
+ 181   1      }
+ 182          
+ 183          void process()
+ 184          {
+ 185   1        switch(Command)
+ 186   1        {
+ 187   2          case POWER:
+ 188   2            //OPERTION
+ 189   2            fan_power_on();
+ 190   2            break;
+ 191   2          /*case LIGHT:
+ 192   2            //OPERTION
+ 193   2            if(RemoteData.Light)
+ 194   2            {
+ 195   2              RemoteData.Light = 0;
+ 196   2              LED_OFF;
+ 197   2            }
+ 198   2            else
+ 199   2            {
+ 200   2              RemoteData.Light = 1;
+ 201   2              LED_ON;
+ 202   2            }
+ 203   2            Command = 0;        
+ 204   2            break; */
+ 205   2          case FAN_SPEED_1:
+ 206   2            //OPERTION
+ 207   2            if(!RemoteData.Sleep)
+ 208   2              {   
+ 209   3                Sleep_Data = 1;
+ 210   3                fanSpeed1();
  211   3              }
- 212   2            Command = 0;  
+ 212   2            Command = 0;        
  213   2            break;
- 214   2          case BOOST:
+ 214   2          case FAN_SPEED_2:
  215   2            //OPERTION
  216   2            if(!RemoteData.Sleep)
  217   2              {   
- 218   3                fanSpeed_BOOST();
- 219   3              }
- 220   2            Command = 0;  
- 221   2            break;
- 222   2          case TIME_2HRS:
- 223   2            //OPERTION
- 224   2            if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs != REMOTE_TIMER_2HRS))
- 225   2            {       
- 226   3              Timer_Hrs_process(REMOTE_TIMER_2HRS);
- 227   3              RemoteData.Timer_Hrs = REMOTE_TIMER_2HRS;                 
- 228   3            }
- 229   2            else if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs == REMOTE_TIMER_2HRS))
- 230   2            {
- 231   3              Timer_Disable();          
- 232   3            }
- 233   2            Command = 0;
- 234   2            break;
- 235   2          case TIME_4HRS:
- 236   2            //OPERTION
- 237   2            if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs != REMOTE_TIMER_4HRS))
- 238   2            {
- 239   3              Timer_Hrs_process(REMOTE_TIMER_4HRS);
-C51 COMPILER V9.60.0.0   MAIN                                                              12/19/2022 10:49:28 PAGE 5   
+ 218   3                Sleep_Data = 2;
+ 219   3                fanSpeed2();
+ 220   3              }
+ 221   2            Command = 0;  
+ 222   2            break;
+ 223   2          case FAN_SPEED_3:
+ 224   2            //OPERTION
+ 225   2            if(!RemoteData.Sleep)
+ 226   2              {   
+ 227   3                Sleep_Data = 3;
+ 228   3                fanSpeed3();
+ 229   3              }
+ 230   2            Command = 0;  
+ 231   2            break;
+ 232   2          case FAN_SPEED_4:
+ 233   2            //OPERTION      
+ 234   2            if(!RemoteData.Sleep)
+ 235   2              {   
+ 236   3                Sleep_Data = 4;
+ 237   3                fanSpeed4();
+ 238   3              }
+ 239   2            Command = 0;  
+C51 COMPILER V9.60.0.0   MAIN                                                              01/04/2023 16:06:19 PAGE 5   
 
- 240   3              RemoteData.Timer_Hrs = REMOTE_TIMER_4HRS;                 
- 241   3            }
- 242   2            else if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs == REMOTE_TIMER_4HRS))
- 243   2            {
- 244   3              Timer_Disable();
- 245   3            }
- 246   2            Command = 0;
- 247   2            break;
- 248   2          /*case TIME_6HRS:
- 249   2            //OPERTION
- 250   2            if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs != REMOTE_TIMER_6HRS))
- 251   2            {
- 252   2              Timer_Hrs_process(REMOTE_TIMER_6HRS);
- 253   2              RemoteData.Timer_Hrs = REMOTE_TIMER_6HRS;                 
- 254   2            }
- 255   2            else if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs == REMOTE_TIMER_6HRS))
- 256   2            {
- 257   2              Timer_Disable();  
- 258   2            }
- 259   2            Command = 0;
- 260   2            break;*/
- 261   2          case TIME_8HRS:
- 262   2            //OPERTION
- 263   2            if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs != REMOTE_TIMER_8HRS))
- 264   2            {
- 265   3              Timer_Hrs_process(REMOTE_TIMER_8HRS);
- 266   3              RemoteData.Timer_Hrs = REMOTE_TIMER_8HRS;                 
- 267   3            }
- 268   2            else if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs == REMOTE_TIMER_8HRS))
- 269   2            {
- 270   3              Timer_Disable();  
- 271   3            }
- 272   2            Command = 0;
- 273   2            break;
- 274   2          case SLEEP_MODE:
- 275   2            //OPERATION
- 276   2            Timer_Disable();
- 277   2            if((!RemoteData.Sleep) && (RemoteData.Power))
- 278   2            {
- 279   3              LED_blink_Counter = 4+(3*(RemoteData.Light));
- 280   3              LED_blink_Status = 1;
- 281   3              RemoteData.Sleep = 1;
- 282   3              SleepTimerStartFlag_1hr =1;
- 283   3              SleepTimerCompleteFlag_1hr = 0;
- 284   3              SleepTimerCounter_1hr = 0;
- 285   3              //Sleep operations
+ 240   2            break;
+ 241   2          case FAN_SPEED_5:
+ 242   2            //OPERTION
+ 243   2            if(!RemoteData.Sleep)
+ 244   2              {   
+ 245   3                Sleep_Data = 5;
+ 246   3                fanSpeed5();
+ 247   3              }
+ 248   2            Command = 0;  
+ 249   2            break;
+ 250   2          case FAN_SPEED_6:
+ 251   2            //OPERTION
+ 252   2            if(!RemoteData.Sleep)
+ 253   2              {   
+ 254   3                Sleep_Data = 6;
+ 255   3                fanSpeed6();
+ 256   3              }
+ 257   2            Command = 0;  
+ 258   2            break;
+ 259   2          case BOOST:
+ 260   2            //OPERTION
+ 261   2            if(!RemoteData.Sleep)
+ 262   2              {   
+ 263   3                fanSpeed_BOOST();
+ 264   3              }
+ 265   2            Command = 0;  
+ 266   2            break;
+ 267   2          case TIME_2HRS:
+ 268   2            //OPERTION
+ 269   2            if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs != REMOTE_TIMER_2HRS))
+ 270   2            {       
+ 271   3              Timer_Hrs_process(REMOTE_TIMER_2HRS);
+ 272   3              RemoteData.Timer_Hrs = REMOTE_TIMER_2HRS; 
+ 273   3            }
+ 274   2            else if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs == REMOTE_TIMER_2HRS))
+ 275   2            {
+ 276   3              Timer_Disable();          
+ 277   3            }
+ 278   2            Command = 0;
+ 279   2            break;
+ 280   2          case TIME_4HRS:
+ 281   2            //OPERTION
+ 282   2            if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs != REMOTE_TIMER_4HRS))
+ 283   2            {
+ 284   3              Timer_Hrs_process(REMOTE_TIMER_4HRS);
+ 285   3              RemoteData.Timer_Hrs = REMOTE_TIMER_4HRS;                 
  286   3            }
- 287   2            else
+ 287   2            else if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs == REMOTE_TIMER_4HRS))
  288   2            {
- 289   3              LED_blink_Counter = 2+(3*(RemoteData.Light));
- 290   3              LED_blink_Status = 1;
- 291   3              RemoteData.Sleep = 0;
- 292   3              SleepTimerStartFlag_1hr = 0;
- 293   3              SleepTimerCompleteFlag_1hr = 0;
- 294   3              SleepTimerCounter_1hr = 0;
- 295   3              // disable all the sleep operations
- 296   3            }
- 297   2            break;
- 298   2            
- 299   2                  
- 300   2          /* case REVERSE_MODE:
- 301   2              if(P0 & 0x40)
-C51 COMPILER V9.60.0.0   MAIN                                                              12/19/2022 10:49:28 PAGE 6   
+ 289   3              Timer_Disable();
+ 290   3            }
+ 291   2            Command = 0;
+ 292   2            break;
+ 293   2          /*case TIME_6HRS:
+ 294   2            //OPERTION
+ 295   2            if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs != REMOTE_TIMER_6HRS))
+ 296   2            {
+ 297   2              Timer_Hrs_process(REMOTE_TIMER_6HRS);
+ 298   2              RemoteData.Timer_Hrs = REMOTE_TIMER_6HRS;                 
+ 299   2            }
+ 300   2            else if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs == REMOTE_TIMER_6HRS))
+ 301   2            {
+C51 COMPILER V9.60.0.0   MAIN                                                              01/04/2023 16:06:19 PAGE 6   
 
- 302   2              {
- 303   2                P0 &= ~(1<<6);
- 304   2              }
- 305   2              else
- 306   2              {
- 307   2                P0 |= (1<<6);
- 308   2              }
- 309   2            break; */     
- 310   2            
- 311   2            
- 312   2          default:
- 313   2            //operation
- 314   2          break;
- 315   2            
- 316   2        }
- 317   1      }
- 318          
- 319          void SystemInitialization(void)
- 320          {
- 321   1        if(RemoteData.Power)
- 322   1        {
- 323   2          switch(RemoteData.FanSpeed)
- 324   2          {
- 325   3            case 0:
- 326   3              //operation
- 327   3              fan_power_off();
- 328   3              //i2c_speed(FAN_OFF_VALUE);
- 329   3              break;
- 330   3            case 1:
- 331   3              //operation
- 332   3              fanSpeed1();
- 333   3              break;
- 334   3            case 2:
- 335   3              //operation
- 336   3              fanSpeed2();
- 337   3              break;
- 338   3            case 3:
- 339   3              //operation
- 340   3              fanSpeed3();
- 341   3              break;
- 342   3            case 4:
- 343   3              //operation
- 344   3              fanSpeed4();
- 345   3              break;
- 346   3            case 5:
- 347   3              //operation
- 348   3              fanSpeed5();
- 349   3              break;
- 350   3            case 6:
- 351   3              //operation
- 352   3              fanSpeed6();
- 353   3              break;
- 354   3            case 7:
- 355   3              //operation
- 356   3              fanSpeed_BOOST();
- 357   3              break;
- 358   3            default:
- 359   3              //operation
- 360   3              //not possible
- 361   3              break;
- 362   3          }
- 363   2        }    
-C51 COMPILER V9.60.0.0   MAIN                                                              12/19/2022 10:49:28 PAGE 7   
+ 302   2              Timer_Disable();  
+ 303   2            }
+ 304   2            Command = 0;
+ 305   2            break;*/
+ 306   2          case TIME_8HRS:
+ 307   2            //OPERTION
+ 308   2            if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs != REMOTE_TIMER_8HRS))
+ 309   2            {
+ 310   3              Timer_Hrs_process(REMOTE_TIMER_8HRS);
+ 311   3              RemoteData.Timer_Hrs = REMOTE_TIMER_8HRS;                 
+ 312   3            }
+ 313   2            else if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs == REMOTE_TIMER_8HRS))
+ 314   2            {
+ 315   3              Timer_Disable();  
+ 316   3            }
+ 317   2            Command = 0;
+ 318   2            break;
+ 319   2          case SLEEP_MODE:
+ 320   2            //OPERATION
+ 321   2            Timer_Disable();
+ 322   2            if((!RemoteData.Sleep) && (RemoteData.Power))
+ 323   2            {
+ 324   3              LED_blink_Counter = 4+(3*(RemoteData.Light));
+ 325   3              LED_blink_Status = 1;
+ 326   3      //        RemoteData.Sleep = 1; //Sunil need to uncommand.
+ 327   3              SleepTimerStartFlag_1hr =1;
+ 328   3              SleepTimerCompleteFlag_1hr = 0;
+ 329   3              SleepTimerCounter_1hr = 0;
+ 330   3              //Sleep operations
+ 331   3            }
+ 332   2            else
+ 333   2            {
+ 334   3              LED_blink_Counter = 2+(3*(RemoteData.Light));
+ 335   3              LED_blink_Status = 1;
+ 336   3              RemoteData.Sleep = 0;
+ 337   3              SleepTimerStartFlag_1hr = 0;
+ 338   3              SleepTimerCompleteFlag_1hr = 0;
+ 339   3              SleepTimerCounter_1hr = 0;
+ 340   3              // disable all the sleep operations
+ 341   3            }
+ 342   2            break;
+ 343   2            
+ 344   2                  
+ 345   2          /* case REVERSE_MODE:
+ 346   2              if(P0 & 0x40)
+ 347   2              {
+ 348   2                P0 &= ~(1<<6);
+ 349   2              }
+ 350   2              else
+ 351   2              {
+ 352   2                P0 |= (1<<6);
+ 353   2              }
+ 354   2            break; */     
+ 355   2            
+ 356   2            
+ 357   2          default:
+ 358   2            //operation
+ 359   2          break;
+ 360   2            
+ 361   2        }
+ 362   1      }
+ 363          
+C51 COMPILER V9.60.0.0   MAIN                                                              01/04/2023 16:06:19 PAGE 7   
 
- 364   1        
- 365   1      
- 366   1        if(RemoteData.Timer_Hrs)
- 367   1          
- 368   1        {
- 369   2          Timer_Hrs_process(RemoteData.Timer_Hrs);
- 370   2          // timer start flag loaded
- 371   2          // general counter value loaded
- 372   2        }
- 373   1        if( RemoteData.Sleep)
- 374   1        {
- 375   2          LED_blink_Counter = 4+(3*(RemoteData.Light));
- 376   2          LED_blink_Status = 1;
- 377   2          RemoteData.Sleep = 1;
- 378   2          SleepTimerStartFlag_1hr =1;
- 379   2          SleepTimerCompleteFlag_1hr = 0;   
- 380   2        }
- 381   1      }
- 382          
- 383          unsigned char current_speed;
- 384          void Fan_load_Line_Monitor(void)
- 385          {
- 386   1        
- 387   1        if(Fan_load_Healthy)  
- 388   1        {
- 389   2          if ((ADC_Value >= (FAN_LOAD_UNHEALTHY_VALUE)))
- 390   2          {
- 391   3            P2IO |= 0x03;
- 392   3            P2PU |= 0x03;     // pullup
- 393   3            P2 |= 0X03;
- 394   3            Fan_load_Healthy = 0;
- 395   3            current_speed = i2c_devicer(speedCtrl_Base_address);
- 396   3            P2IO &= ~0x03;
- 397   3            P2PU &= ~0X03;
- 398   3            if(!Fan_load_healthy_once_flag)
- 399   3            {
- 400   4              current_speed = current_speed-10;
- 401   4              i2c_speed(current_speed);
- 402   4            }
- 403   3            else if (Fan_load_healthy_once_flag)
- 404   3            {
- 405   4              if(ADC_Value <= (FAN_LOAD_UNHEALTHY_VALUE+3))
- 406   4              {
- 407   5                Fan_load_Healthy = 1;
- 408   5              }
- 409   4              else
- 410   4              {
- 411   5                Fan_load_Healthy = 0;
- 412   5              }
- 413   4            }
- 414   3          }     
- 415   2        }
- 416   1        else
- 417   1        {
- 418   2          //Check wheateher AC is not in healthy state
- 419   2          if((ADC_Value <= FAN_LOAD_HYSTERSIS_VALUE)||(ADC_Value < (FAN_LOAD_HEALTHY_VALUE-1)))
- 420   2          {
- 421   3            //Fan_load_Healthy = 1;
- 422   3            if(current_speed < 255)
- 423   3            { 
- 424   4              current_speed = current_speed+1;
- 425   4            }
-C51 COMPILER V9.60.0.0   MAIN                                                              12/19/2022 10:49:28 PAGE 8   
+ 364          void SystemInitialization(void)
+ 365          {
+ 366   1        if(RemoteData.Power)
+ 367   1        {
+ 368   2          switch(RemoteData.FanSpeed)
+ 369   2          {
+ 370   3            case 0:
+ 371   3              //operation
+ 372   3              fan_power_off();
+ 373   3              //i2c_speed(FAN_OFF_VALUE);
+ 374   3              break;
+ 375   3            case 1:
+ 376   3              //operation
+ 377   3              fanSpeed1();
+ 378   3              break;
+ 379   3            case 2:
+ 380   3              //operation
+ 381   3              fanSpeed2();
+ 382   3              break;
+ 383   3            case 3:
+ 384   3              //operation
+ 385   3              fanSpeed3();
+ 386   3              break;
+ 387   3            case 4:
+ 388   3              //operation
+ 389   3              fanSpeed4();
+ 390   3              break;
+ 391   3            case 5:
+ 392   3              //operation
+ 393   3              fanSpeed5();
+ 394   3              break;
+ 395   3            case 6:
+ 396   3              //operation
+ 397   3              fanSpeed6();
+ 398   3              break;
+ 399   3            case 7:
+ 400   3              //operation
+ 401   3              fanSpeed_BOOST();
+ 402   3              break;
+ 403   3            default:
+ 404   3              //operation
+ 405   3              //not possible
+ 406   3              break;
+ 407   3          }
+ 408   2        }    
+ 409   1        
+ 410   1      
+ 411   1        if(RemoteData.Timer_Hrs)
+ 412   1          
+ 413   1        {
+ 414   2          Timer_Hrs_process(RemoteData.Timer_Hrs);
+ 415   2          // timer start flag loaded
+ 416   2          // general counter value loaded
+ 417   2        }
+ 418   1        if( RemoteData.Sleep)
+ 419   1        {
+ 420   2          LED_blink_Counter = 4+(3*(RemoteData.Light));
+ 421   2          LED_blink_Status = 1;
+ 422   2      //    RemoteData.Sleep = 1; //Sunil need to uncommand.
+ 423   2          SleepTimerStartFlag_1hr =1;
+ 424   2          SleepTimerCompleteFlag_1hr = 0;   
+ 425   2        }
+C51 COMPILER V9.60.0.0   MAIN                                                              01/04/2023 16:06:19 PAGE 8   
 
- 426   3            i2c_speed(current_speed);
- 427   3            //SystemInitialization();
- 428   3            //fan on in previous condition
- 429   3          }
- 430   2          else if((ADC_Value >= (FAN_LOAD_HEALTHY_VALUE-1)) && (ADC_Value <= (FAN_LOAD_UNHEALTHY_VALUE-5)))
- 431   2          {
- 432   3            Fan_load_helathy_count++;
- 433   3            if(Fan_load_helathy_count >= 20)
- 434   3            {
- 435   4              Fan_load_helathy_count = 0;
- 436   4              Fan_load_Healthy = 1; 
- 437   4              Fan_load_healthy_once_flag = 1;
- 438   4            }       
- 439   3          }
- 440   2          /*else if(ADC_Value >= FAN_LOAD_UNHEALTHY_VALUE+25)
- 441   2          {
- 442   2            current_speed = current_speed-10;
- 443   2            i2c_speed(current_speed);
- 444   2          }*/
- 445   2          else
- 446   2          {
- 447   3            //lower the speed
- 448   3            current_speed = current_speed-2;
- 449   3            i2c_speed(current_speed);
- 450   3          }
- 451   2        }
- 452   1      }
+ 426   1      }
+ 427          
+ 428          unsigned char current_speed;
+ 429          void Fan_load_Line_Monitor(void)
+ 430          {
+ 431   1        
+ 432   1        if(Fan_load_Healthy)  
+ 433   1        {
+ 434   2          if ((ADC_Value >= (FAN_LOAD_UNHEALTHY_VALUE)))
+ 435   2          {
+ 436   3            P2IO |= 0x03;
+ 437   3            P2PU |= 0x03;     // pullup
+ 438   3            P2 |= 0X03;
+ 439   3            Fan_load_Healthy = 0;
+ 440   3            current_speed = i2c_devicer(speedCtrl_Base_address);
+ 441   3            P2IO &= ~0x03;
+ 442   3            P2PU &= ~0X03;
+ 443   3            if(!Fan_load_healthy_once_flag)
+ 444   3            {
+ 445   4              current_speed = current_speed-10;
+ 446   4              i2c_speed(current_speed);
+ 447   4            }
+ 448   3            else if (Fan_load_healthy_once_flag)
+ 449   3            {
+ 450   4              if(ADC_Value <= (FAN_LOAD_UNHEALTHY_VALUE+3))
+ 451   4              {
+ 452   5                Fan_load_Healthy = 1;
+ 453   5              }
+ 454   4              else
+ 455   4              {
+ 456   5                Fan_load_Healthy = 0;
+ 457   5              }
+ 458   4            }
+ 459   3          }     
+ 460   2        }
+ 461   1        else
+ 462   1        {
+ 463   2          //Check wheateher AC is not in healthy state
+ 464   2          if((ADC_Value <= FAN_LOAD_HYSTERSIS_VALUE)||(ADC_Value < (FAN_LOAD_HEALTHY_VALUE-1)))
+ 465   2          {
+ 466   3            //Fan_load_Healthy = 1;
+ 467   3            if(current_speed < 255)
+ 468   3            { 
+ 469   4              current_speed = current_speed+1;
+ 470   4            }
+ 471   3            i2c_speed(current_speed);
+ 472   3            //SystemInitialization();
+ 473   3            //fan on in previous condition
+ 474   3          }
+ 475   2          else if((ADC_Value >= (FAN_LOAD_HEALTHY_VALUE-1)) && (ADC_Value <= (FAN_LOAD_UNHEALTHY_VALUE-5)))
+ 476   2          {
+ 477   3            Fan_load_helathy_count++;
+ 478   3            if(Fan_load_helathy_count >= 20)
+ 479   3            {
+ 480   4              Fan_load_helathy_count = 0;
+ 481   4              Fan_load_Healthy = 1; 
+ 482   4              Fan_load_healthy_once_flag = 1;
+ 483   4            }       
+ 484   3          }
+ 485   2          /*else if(ADC_Value >= FAN_LOAD_UNHEALTHY_VALUE+25)
+ 486   2          {
+ 487   2            current_speed = current_speed-10;
+C51 COMPILER V9.60.0.0   MAIN                                                              01/04/2023 16:06:19 PAGE 9   
+
+ 488   2            i2c_speed(current_speed);
+ 489   2          }*/
+ 490   2          else
+ 491   2          {
+ 492   3            //lower the speed
+ 493   3            current_speed = current_speed-2;
+ 494   3            i2c_speed(current_speed);
+ 495   3          }
+ 496   2        }
+ 497   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1709    ----
+   CODE SIZE        =   1577    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =     11      14
+   XDATA SIZE       =     12      14
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

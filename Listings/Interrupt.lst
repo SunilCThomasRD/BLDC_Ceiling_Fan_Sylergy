@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.0.0   INTERRUPT                                                         12/19/2022 10:49:28 PAGE 1   
+C51 COMPILER V9.60.0.0   INTERRUPT                                                         01/04/2023 16:06:19 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE INTERRUPT
 OBJECT MODULE PLACED IN .\Objects\Interrupt.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\Interrupt.c LARGE OPTIMIZE(4,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\Interrupt.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(
                     -.\Listings\Interrupt.lst) TABS(2) OBJECT(.\Objects\Interrupt.obj)
 
 line level    source
@@ -30,168 +30,169 @@ line level    source
   19          
   20          void INT_Ext10() interrupt 1
   21          {
-  22   1        if(!RemotePress)
-  23   1        {
-  24   2        timerValue = msCount;
-  25   2        msCount = 0;
-  26   2        pulseCount++;
-  27   2        if((timerValue>=200)) // If the pulse width is greater than 50ms, this will mark the SOF
-  28   2        { 
-  29   3          pulseCount = -2; // First 2 counts needs to be skipped hence pulse ocunt is set to -2 
-  30   3          bitPattern = 0;
-  31   3        }
-  32   2        else if((pulseCount>=0) && (pulseCount<32)) //Accumulate the bit values between 0-31.
-  33   2        {   
-  34   3          if(timerValue>=8)                      //pulse width greater than 2ms is considered as LOGIC1
-  35   3          {
-  36   4            bitPattern |=(long) 1<<(31-pulseCount);
-  37   4          }
-  38   3          else
-  39   3          {
-  40   4          }
-  41   3        }
-  42   2        else if(pulseCount>=32)                  //This will mark the End of frame as 32 pulses are received
-  43   2        {
-  44   3          NewKey = bitPattern;                // Copy the newKey(patter) and set the pulse count to 0;
-  45   3          pulseCount = 0;
-  46   3          RemotePress = 1;
-  47   3        }
-  48   2        }
-  49   1        // External interrupt 10
-  50   1        // TODO: add your code here
-  51   1      }
-  52          
-  53          void INT_Timer0() interrupt 9
-C51 COMPILER V9.60.0.0   INTERRUPT                                                         12/19/2022 10:49:28 PAGE 2   
+  22   1      //  LED_OFF;
+  23   1        if(!RemotePress)
+  24   1        {
+  25   2        timerValue = msCount;
+  26   2        msCount = 0;
+  27   2        pulseCount++;
+  28   2        if((timerValue>=200)) // If the pulse width is greater than 50ms, this will mark the SOF
+  29   2        { 
+  30   3          pulseCount = -2; // First 2 counts needs to be skipped hence pulse ocunt is set to -2 
+  31   3          bitPattern = 0;
+  32   3        }
+  33   2        else if((pulseCount>=0) && (pulseCount<32)) //Accumulate the bit values between 0-31.
+  34   2        {   
+  35   3          if(timerValue>=8)                      //pulse width greater than 2ms is considered as LOGIC1
+  36   3          {
+  37   4            bitPattern |=(long) 1<<(31-pulseCount);
+  38   4          }
+  39   3          else
+  40   3          {
+  41   4          }
+  42   3        }
+  43   2        else if(pulseCount>=32)                  //This will mark the End of frame as 32 pulses are received
+  44   2        {
+  45   3          NewKey = bitPattern;                // Copy the newKey(patter) and set the pulse count to 0;
+  46   3          pulseCount = 0;
+  47   3          RemotePress = 1;
+  48   3        }
+  49   2        }
+  50   1        // External interrupt 10
+  51   1        // TODO: add your code here
+  52   1      }
+  53          
+C51 COMPILER V9.60.0.0   INTERRUPT                                                         01/04/2023 16:06:19 PAGE 2   
 
-  54          {
-  55   1        if(msCount <= 250)
-  56   1        {
-  57   2          msCount++;
-  58   2        }
-  59   1        ADC250usCount++;
-  60   1        //Fan_load_unhealthy_Counter++;
-  61   1        if (ADC250usCount >= 100)
-  62   1        {
-  63   2          ADC_start(8);
-  64   2          ADC250usCount = 0;
-  65   2          Fan_load_unhealthy_Counter++;
-  66   2        }   
-  67   1        // Timer0 interrupt
-  68   1        // TODO: add your code here
-  69   1      }
-  70          
+  54          void INT_Timer0() interrupt 9
+  55          {
+  56   1        if(msCount <= 250)
+  57   1        {
+  58   2          msCount++;
+  59   2        }
+  60   1        ADC250usCount++;
+  61   1        //Fan_load_unhealthy_Counter++;
+  62   1        if (ADC250usCount >= 100)
+  63   1        {
+  64   2          ADC_start(8);
+  65   2          ADC250usCount = 0;
+  66   2          Fan_load_unhealthy_Counter++;
+  67   2        }   
+  68   1        // Timer0 interrupt
+  69   1        // TODO: add your code here
+  70   1      }
   71          
-  72          void INT_Timer1() interrupt 10        // 250msec interrupt
-  73          {
-  74   1        if(LED_blink_Counter)
-  75   1        {
-  76   2          if(OneSecTimer % 2 == 0)
-  77   2          {
-  78   3            LED_ON;
-  79   3          }
-  80   2          else
-  81   2          {
-  82   3            LED_OFF;
-  83   3          }
-  84   2          LED_blink_Counter--;
-  85   2        }
-  86   1        if((LED_blink_Status) && (LED_blink_Counter > 0))
-  87   1        {
-  88   2          OneSecTimer++;
-  89   2        }
-  90   1        else
-  91   1        {
-  92   2          OneSecTimer = 0;
-  93   2          LED_blink_Status = 0;
-  94   2          LED_blink_Counter = 0;
-  95   2          if(RemoteData.Light)
-  96   2          {
-  97   3            LED_ON;
-  98   3          }
-  99   2        }
- 100   1        
- 101   1        if(TimerStartFlag)
- 102   1        {
- 103   2          General_Counter++;
- 104   2          Timer5min++;
- 105   2          if(General_Counter >= TimerHrsValue)
- 106   2          {
- 107   3            /*LED_blink_Counter = 2;
- 108   3            LED_blink_Status = 1;
- 109   3            //fan_power_off();
- 110   3            //i2c_speed(FAN_OFF_VALUE);
- 111   3            Timer_Counter_Complete_Flag = 1;
- 112   3            RemoteData.Power = 0;
- 113   3            RemoteData.Timer_Hrs = REMOTE_TIMER_OFF;
- 114   3            TimerStartFlag = 0;
- 115   3            General_Counter = 0;
-C51 COMPILER V9.60.0.0   INTERRUPT                                                         12/19/2022 10:49:28 PAGE 3   
+  72          
+  73          void INT_Timer1() interrupt 10        // 250msec interrupt
+  74          {
+  75   1        if(LED_blink_Counter)
+  76   1        {
+  77   2          if(OneSecTimer % 2 == 0)
+  78   2          {
+  79   3            LED_ON;
+  80   3          }
+  81   2          else
+  82   2          {
+  83   3            LED_OFF;
+  84   3          }
+  85   2          LED_blink_Counter--;
+  86   2        }
+  87   1        if((LED_blink_Status) && (LED_blink_Counter > 0))
+  88   1        {
+  89   2          OneSecTimer++;
+  90   2        }
+  91   1        else
+  92   1        {
+  93   2          OneSecTimer = 0;
+  94   2          LED_blink_Status = 0;
+  95   2          LED_blink_Counter = 0;
+  96   2          if(RemoteData.Light)
+  97   2          {
+  98   3            LED_ON;
+  99   3          }
+ 100   2        }
+ 101   1        
+ 102   1        if(TimerStartFlag)
+ 103   1        {
+ 104   2          General_Counter++;
+ 105   2          Timer5min++;
+ 106   2          if(General_Counter >= TimerHrsValue)
+ 107   2          {
+ 108   3            /*LED_blink_Counter = 2;
+ 109   3            LED_blink_Status = 1;
+ 110   3            //fan_power_off();
+ 111   3            //i2c_speed(FAN_OFF_VALUE);
+ 112   3            Timer_Counter_Complete_Flag = 1;
+ 113   3            RemoteData.Power = 0;
+ 114   3            RemoteData.Timer_Hrs = REMOTE_TIMER_OFF;
+ 115   3            TimerStartFlag = 0;
+C51 COMPILER V9.60.0.0   INTERRUPT                                                         01/04/2023 16:06:19 PAGE 3   
 
- 116   3            TimerHrsValue = 0;*/
- 117   3            Timer_Counter_Complete_Flag = 1;
- 118   3          }
- 119   2        }
- 120   1        if(SleepTimerStartFlag_1hr)
- 121   1        {
- 122   2          SleepTimerCounter_1hr++;
- 123   2          Timer5min++;
- 124   2          if(SleepTimerCounter_1hr >= SLEEP_ONE_HOUR_TIMER1_VALUE)
- 125   2          {
- 126   3            SleepTimerCompleteFlag_1hr = 1;
- 127   3            SleepTimerCounter_1hr = 0;
- 128   3          }   
- 129   2        }
- 130   1        // Timer1 interrupt
- 131   1        // TODO: add your code here
- 132   1      }
- 133          
- 134          unsigned int adcVal = 0;
- 135          xdata long ADCdata;
- 136          xdata unsigned int ADC_Value = 0;
- 137          
- 138          void INT_ADC() interrupt 12
- 139          { 
- 140   1        static unsigned char SamplesTaken = 0;
- 141   1        xdata long temp = 0;
- 142   1        //long temp,ADCdata;
- 143   1        // ADC interrupt
- 144   1        // TODO: add your code here
- 145   1        adcVal = (ADCRH << 8) | ADCRL;
- 146   1        ADCdata += adcVal;
- 147   1        SamplesTaken++;
- 148   1        if(SamplesTaken >= ADC_SAMPLES)
- 149   1        {
- 150   2          ADCdata = ADCdata/ADC_SAMPLES;
- 151   2          temp = (long)250*ADCdata;
- 152   2          temp = temp/4096;
- 153   2          ADC_Value = (unsigned int)temp;
- 154   2          SamplesTaken = 0;
- 155   2          ADCdata = 0;
- 156   2        }
- 157   1        ADCM &= ~0x40;    // stop ADC
- 158   1        
- 159   1      }
- 160          
+ 116   3            General_Counter = 0;
+ 117   3            TimerHrsValue = 0;*/
+ 118   3            Timer_Counter_Complete_Flag = 1;
+ 119   3          }
+ 120   2        }
+ 121   1        if(SleepTimerStartFlag_1hr)
+ 122   1        {
+ 123   2          SleepTimerCounter_1hr++;
+ 124   2          Timer5min++;
+ 125   2          if(SleepTimerCounter_1hr >= SLEEP_ONE_HOUR_TIMER1_VALUE)
+ 126   2          {
+ 127   3            SleepTimerCompleteFlag_1hr = 1;
+ 128   3            SleepTimerCounter_1hr = 0;
+ 129   3          }   
+ 130   2        }
+ 131   1        // Timer1 interrupt
+ 132   1        // TODO: add your code here
+ 133   1      }
+ 134          
+ 135          unsigned int adcVal = 0;
+ 136          xdata long ADCdata;
+ 137          xdata unsigned int ADC_Value = 0;
+ 138          
+ 139          void INT_ADC() interrupt 12
+ 140          { 
+ 141   1        static unsigned char SamplesTaken = 0;
+ 142   1        xdata long temp = 0;
+ 143   1        //long temp,ADCdata;
+ 144   1        // ADC interrupt
+ 145   1        // TODO: add your code here
+ 146   1        adcVal = (ADCRH << 8) | ADCRL;
+ 147   1        ADCdata += adcVal;
+ 148   1        SamplesTaken++;
+ 149   1        if(SamplesTaken >= ADC_SAMPLES)
+ 150   1        {
+ 151   2          ADCdata = ADCdata/ADC_SAMPLES;
+ 152   2          temp = (long)250*ADCdata;
+ 153   2          temp = temp/4096;
+ 154   2          ADC_Value = (unsigned int)temp;
+ 155   2          SamplesTaken = 0;
+ 156   2          ADCdata = 0;
+ 157   2        }
+ 158   1        ADCM &= ~0x40;    // stop ADC
+ 159   1        
+ 160   1      }
  161          
  162          
- 163          void INT_LVI() interrupt 15
- 164          {
- 165   1        // LVI interrupt
- 166   1        // TODO: add your code here
- 167   1        LowVoltageResetFlag = 1;
- 168   1        
- 169   1      }
+ 163          
+ 164          void INT_LVI() interrupt 15
+ 165          {
+ 166   1        // LVI interrupt
+ 167   1        // TODO: add your code here
+ 168   1        LowVoltageResetFlag = 1;
+ 169   1        
+ 170   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1029    ----
+   CODE SIZE        =   1020    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     44       4
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----    ----
-C51 COMPILER V9.60.0.0   INTERRUPT                                                         12/19/2022 10:49:28 PAGE 4   
+C51 COMPILER V9.60.0.0   INTERRUPT                                                         01/04/2023 16:06:19 PAGE 4   
 
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

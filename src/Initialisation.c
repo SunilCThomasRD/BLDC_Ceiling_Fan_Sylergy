@@ -85,8 +85,10 @@ void clock_init()
 	SCCR = 0x40;
 	wait_100uSec(NOP_COUNT/2);
 	OSCCR = 0x04;
+	WDTMR = 0x00;
 	SYSCON_AR = 0x00;	// Disable permission
-	WDTMR = 0x38;
+//	WDTMR = 0x38;
+
 }
 
 void port_init()
@@ -95,7 +97,7 @@ void port_init()
 	//   2 : PWM2o    out speed control
 	//  12 : P05      out 
 	//  15 : EINT10   in  ir remote
-	P0IO = 0xFB;    	// direction
+	P0IO = 0xFB;    	// direction 11111011
 	P0PU = 0x00;    	// pullup
 	P0OD = 0x00;    	// open drain
 	P0DB = 0x00;    	// debounce

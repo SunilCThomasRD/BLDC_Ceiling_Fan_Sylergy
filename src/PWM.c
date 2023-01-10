@@ -7,7 +7,7 @@ extern unsigned int TimerHrsValue,General_Counter;
 extern unsigned char Command,LED_blink_Counter,LED_blink_Status;
 extern long SleepTimerCounter_1hr;
 extern struct RemoteStatus RemoteData;
-
+extern unsigned char Sleep_Data;
 //void i2c_speed(unsigned char);
 //unsigned char temp = 0;
 void fan_power_off(void)
@@ -27,6 +27,7 @@ void fan_power_on(void)
 		LED_blink_Counter = 2+(3*(RemoteData.Light));
 		LED_blink_Status = 1;
 		fan_power_off();
+		Sleep_Data = 7;
 		//i2c_speed(FAN_OFF_VALUE);
 		RemoteData.Power = 0;
 		if(RemoteData.FanSpeed == 0)
@@ -40,13 +41,14 @@ void fan_power_on(void)
 			TimerHrsValue = 0;
 			RemoteData.Timer_Hrs = REMOTE_TIMER_OFF;	
 		}
-		if(RemoteData.Sleep)
-		{
-			SleepTimerStartFlag_1hr = 0;
-			SleepTimerCompleteFlag_1hr = 0;
-			SleepTimerCounter_1hr = 0;
-			RemoteData.Sleep = 0;
-		}
+		/*Sunil commanded*/
+//		if(RemoteData.Sleep)
+//		{
+//			SleepTimerStartFlag_1hr = 0;
+//			SleepTimerCompleteFlag_1hr = 0;
+//			SleepTimerCounter_1hr = 0;
+//			RemoteData.Sleep = 0;
+//		}
 		//fan_power = 0;
 		Command = 0;
 	}
@@ -56,31 +58,38 @@ void fan_power_on(void)
 		{
 			case 0:
 				//operation
+				Sleep_Data = 0;
 				fan_power_off();
 				//i2c_speed(FAN_OFF_VALUE);
 				break;
 			case 1:
 				//operation
+				Sleep_Data = 1;
 				fanSpeed1();
 				break;
 			case 2:
 				//operation
+				Sleep_Data = 2;
 				fanSpeed2();
 				break;
 			case 3:
 				//operation
+				Sleep_Data = 3;
 				fanSpeed3();
 				break;
 			case 4:
 				//operation
+				Sleep_Data = 4;
 				fanSpeed4();
 				break;
 			case 5:
 				//operation
+				Sleep_Data = 5;
 				fanSpeed5();
 				break;
 			case 6:
 				//operation
+				Sleep_Data = 6;
 				fanSpeed6();
 				break;
 			case 7:
@@ -201,6 +210,8 @@ void Timer_Hrs_process(unsigned char Timer)
 		LED_blink_Status = 1;
 		TimerStartFlag = 1;
 		TimerHrsValue = 14400;
+//		TimerHrsValue = 400;	//for 5min
+//		TimerHrsValue = 128;	//for debug
 	}
 	else if(Timer == REMOTE_TIMER_4HRS)
 	{

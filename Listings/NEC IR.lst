@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.0.0   NEC_IR                                                            12/19/2022 10:49:29 PAGE 1   
+C51 COMPILER V9.60.0.0   NEC_IR                                                            01/04/2023 16:06:19 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE NEC_IR
 OBJECT MODULE PLACED IN .\Objects\NEC IR.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\NEC IR.c LARGE OPTIMIZE(4,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\L
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\NEC IR.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\L
                     -istings\NEC IR.lst) TABS(2) OBJECT(.\Objects\NEC IR.obj)
 
 line level    source
@@ -62,7 +62,7 @@ line level    source
   52   2            break;
   53   2          case KEY10:
   54   2            //OPERATION
-C51 COMPILER V9.60.0.0   NEC_IR                                                            12/19/2022 10:49:29 PAGE 2   
+C51 COMPILER V9.60.0.0   NEC_IR                                                            01/04/2023 16:06:19 PAGE 2   
 
   55   2            return(TIME_2HRS);
   56   2            break;
@@ -90,7 +90,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    252    ----
+   CODE SIZE        =    239    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----       6
    PDATA SIZE       =   ----    ----

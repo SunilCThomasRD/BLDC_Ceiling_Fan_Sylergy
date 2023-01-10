@@ -17,7 +17,7 @@ int count_500;
 //bit debug_flag;
 
 extern struct RemoteStatus RemoteData;
-
+unsigned char OnceProgrameFlag_Dummy;
 //------------------------------------------------------------------------------
 //	C51: SOFTWARE RESET
 void	reset (void)
@@ -68,6 +68,8 @@ unsigned char test_self_PGM()
 		return SELF_PGM_VERIFY_ERROR;	
 	}
 	
+	Flash_Read(TEST_WRITE_ADDRESS, &OnceProgrameFlag_Dummy, 1);
+
 	return SELF_PGM_OK;
 }
 //------------------------------------------------------------------------------

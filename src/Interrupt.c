@@ -19,6 +19,7 @@ xdata unsigned int Fan_load_unhealthy_Counter;
 
 void INT_Ext10() interrupt 1
 {
+//	LED_OFF;
 	if(!RemotePress)
 	{
 	timerValue = msCount;

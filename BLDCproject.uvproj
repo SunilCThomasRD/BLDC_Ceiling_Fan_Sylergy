@@ -13,14 +13,14 @@
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
-          <Device>M8051EW</Device>
-          <Vendor>Mentor Graphics Co.</Vendor>
-          <Cpu>IRAM(0 - 0xFF) XRAM(0-0xFFFF) IROM(0-0xFFFF) CLOCK(12000000) MOD517DP</Cpu>
+          <Device>A94B114</Device>
+          <Vendor>ABOV Semiconductor</Vendor>
+          <Cpu>IRAM(0x00 - 0xFF) XRAM(0x0000-0x1FFF) IROM(0-0xFFFF) CLOCK(12000000) MODP2</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile>"LIB\STARTUP.A51" ("Standard 8051 Startup Code")</StartupFile>
           <FlashDriverDll></FlashDriverDll>
-          <DeviceId>3227</DeviceId>
-          <RegisterFile>REG52.H</RegisterFile>
+          <DeviceId>8431</DeviceId>
+          <RegisterFile>A94B114.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -36,8 +36,8 @@
           <BinPath></BinPath>
           <IncludePath></IncludePath>
           <LibPath></LibPath>
-          <RegisterFilePath></RegisterFilePath>
-          <DBRegisterFilePath></DBRegisterFilePath>
+          <RegisterFilePath>Abov\</RegisterFilePath>
+          <DBRegisterFilePath>Abov\</DBRegisterFilePath>
           <TargetStatus>
             <Error>0</Error>
             <ExitCodeStop>0</ExitCodeStop>
@@ -149,7 +149,7 @@
             <RestoreSysVw>1</RestoreSysVw>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>12</TargetSelection>
+          <TargetSelection>-1</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -163,7 +163,7 @@
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
             <InitializationFile></InitializationFile>
-            <Driver>C:\Program Files (x86)\ABOV Semiconductor\OCD2_debugger64\ABOV_OCD.DLL</Driver>
+            <Driver></Driver>
           </TargetDlls>
         </DebugOption>
         <Utilities>
@@ -172,12 +172,12 @@
             <UseExternalTool>0</UseExternalTool>
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
-            <Capability>1</Capability>
+            <Capability>0</Capability>
             <DriverSelection>-1</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2></Flash2>
-          <Flash3>"" ()</Flash3>
+          <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -191,7 +191,7 @@
             <RomSize>2</RomSize>
             <DataHold>0</DataHold>
             <XDataHold>0</XDataHold>
-            <UseOnchipRom>1</UseOnchipRom>
+            <UseOnchipRom>0</UseOnchipRom>
             <UseOnchipArithmetic>0</UseOnchipArithmetic>
             <UseMultipleDPTR>0</UseMultipleDPTR>
             <UseOnchipXram>0</UseOnchipXram>
@@ -200,8 +200,8 @@
             <HadIROM>1</HadIROM>
             <Moda2>0</Moda2>
             <Moddp2>0</Moddp2>
-            <Modp2>0</Modp2>
-            <Mod517dp>1</Mod517dp>
+            <Modp2>1</Modp2>
+            <Mod517dp>0</Mod517dp>
             <Mod517au>0</Mod517au>
             <Mode2>0</Mode2>
             <useCB>0</useCB>
@@ -283,7 +283,7 @@
               <XRA>
                 <Type>0</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0x2000</Size>
               </XRA>
               <XRA512>
                 <Type>0</Type>
@@ -314,7 +314,7 @@
             <uAregs>0</uAregs>
             <UseInterruptVector>1</UseInterruptVector>
             <Fuzzy>3</Fuzzy>
-            <Optimize>4</Optimize>
+            <Optimize>8</Optimize>
             <WarningLevel>2</WarningLevel>
             <SizeSpeed>1</SizeSpeed>
             <ObjectExtend>1</ObjectExtend>

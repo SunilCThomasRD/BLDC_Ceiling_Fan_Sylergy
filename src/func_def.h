@@ -1,19 +1,36 @@
+#define NASH_REMOTE
 
-#define KEY1		0x30CF2AD5									//POWER
-#define KEY2		0x1B7EE01F										//LIGHT
-#define KEY3		0x30CFAA55										// FAN SPEED 1
-#define KEY4		0x30CF6A95										// FAN SPEED 2
-#define KEY5		0x30CFEA15										// FAN SPEED 3
-#define KEY6		0x30CF1AE5										// FAN SPEED 4
-#define KEY7		0x30CF9A65										// FAN SPEED 5
-#define KEY8		0x1B7EA857										// FAN SPEED 6
-#define KEY9		/*0x00FF6996*/ 0x1B7EC837			// BOOST
-#define KEY10		0x30CF5AA5										// TIMER 2H
-#define KEY11		0x30CFDA25										// TIMER 4H
-#define KEY12		0x30CF3AC5										// TIMER 8H
-#define KEY13		0x1B7E48B7										// REVERSE
-#define KEY14		0x30CFFA05 										// SMART / SLEEP
-								
+#ifdef NASH_REMOTE
+	#define KEY1		0x1B7E10EF									//POWER		//Sunil edited
+	#define KEY2		0x1B7EE01F										//LIGHT
+	#define KEY3		0x1B7E807F										// FAN SPEED 1	//Sunil edited
+	#define KEY4		0x1B7E40BF										// FAN SPEED 2	//Sunil edited
+	#define KEY5		0x1B7EC03F										// FAN SPEED 3	//Sunil edited
+	#define KEY6		0x1B7E20DF										// FAN SPEED 4	//Sunil edited
+	#define KEY7		0x1B7EA05F										// FAN SPEED 5	//Sunil edited
+	#define KEY8		0x1B7EA857										// FAN SPEED 6	//Sunil edited
+	#define KEY9		/*0x00FF6996*/ 0x1B7EC837			// BOOST
+	#define KEY10		0x1B7E906F										// TIMER 2H			//Sunil edited
+	#define KEY11		0x1B7E08F7										// TIMER 4H			//Sunil edited
+	#define KEY12		0x1B7E48B7										// TIMER 8H			//Sunil edited
+	#define KEY13		0x1B7E48B8										// REVERSE			//Sunil edited
+	#define KEY14		0x30CFFA05 										// SMART / SLEEP
+#else
+	#define KEY1		0x30CF2AD5									//POWER
+	#define KEY2		0x1B7EE01F										//LIGHT
+	#define KEY3		0x30CFAA55										// FAN SPEED 1
+	#define KEY4		0x30CF6A95										// FAN SPEED 2
+	#define KEY5		0x30CFEA15										// FAN SPEED 3
+	#define KEY6		0x30CF1AE5										// FAN SPEED 4
+	#define KEY7		0x30CF9A65										// FAN SPEED 5
+	#define KEY8		0x1B7EA857										// FAN SPEED 6
+	#define KEY9		/*0x00FF6996*/ 0x1B7EC837			// BOOST
+	#define KEY10		0x30CF5AA5										// TIMER 2H
+	#define KEY11		0x30CFDA25										// TIMER 4H
+	#define KEY12		0x30CF3AC5										// TIMER 8H
+	#define KEY13		0x1B7E48B7										// REVERSE
+	#define KEY14		0x30CFFA05 										// SMART / SLEEP
+#endif	//NASH_REMOTE
 
 #define POWER					0x0E
 #define LIGHT					0x01
@@ -38,8 +55,8 @@
 #define REMOTE_TIMER_8HRS		0x04
 
 
-#define LED_OFF 				P0 |= 0x20
-#define LED_ON		 			P0 &= ~(0x20)
+#define LED_OFF					P0 &= ~(1<<5)
+#define LED_ON 		 			P0 |= 1<<5
 
 #define ADC_SAMPLES 					50
 
@@ -52,14 +69,25 @@
 #define SLEEP_ONE_HOUR_TIMER1_VALUE		7200
 #define TIMER_5_MINUTES		600
 
-#define FAN_OFF_VALUE					0
-#define FAN_SPEED1_VALUE			100
-#define FAN_SPEED2_VALUE			120
-#define FAN_SPEED3_VALUE			150
-#define FAN_SPEED4_VALUE			170
-#define FAN_SPEED5_VALUE			203// 225- 32W Final // 337 RPM  //205 - 33W -34W Hunt 
-#define FAN_SPEED6_VALUE			185 // 333 RPM
-#define FAN_BOOST_VALUE				203
+#ifdef NASH_REMOTE
+	#define FAN_OFF_VALUE					0
+	#define FAN_SPEED1_VALUE			110// Sunil edited
+	#define FAN_SPEED2_VALUE			140// Sunil edited
+	#define FAN_SPEED3_VALUE			180// Sunil edited
+	#define FAN_SPEED4_VALUE			200// Sunil edited
+	#define FAN_SPEED5_VALUE			230// Sunil edited 
+	#define FAN_SPEED6_VALUE			185 // 333 RPM
+	#define FAN_BOOST_VALUE				203
+#else
+	#define FAN_OFF_VALUE					0
+	#define FAN_SPEED1_VALUE			100
+	#define FAN_SPEED2_VALUE			120
+	#define FAN_SPEED3_VALUE			150
+	#define FAN_SPEED4_VALUE			170
+	#define FAN_SPEED5_VALUE			203// 225- 32W Final // 337 RPM  //205 - 33W -34W Hunt 
+	#define FAN_SPEED6_VALUE			185 // 333 RPM
+	#define FAN_BOOST_VALUE				203
+#endif	//NASH_REMOTE
 
 //======================================================
 // Function and global variables definition

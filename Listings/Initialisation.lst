@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.0.0   INITIALISATION                                                    12/19/2022 10:49:27 PAGE 1   
+C51 COMPILER V9.60.0.0   INITIALISATION                                                    01/04/2023 16:06:19 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE INITIALISATION
 OBJECT MODULE PLACED IN .\Objects\Initialisation.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\Initialisation.c LARGE OPTIMIZE(4,SPEED) BROWSE DEBUG OBJECTEXTEND P
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\Initialisation.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND P
                     -RINT(.\Listings\Initialisation.lst) TABS(2) OBJECT(.\Objects\Initialisation.obj)
 
 line level    source
@@ -62,7 +62,7 @@ line level    source
   52          void Timer0_init()
   53          {
   54   1        // initialize Timer0
-C51 COMPILER V9.60.0.0   INITIALISATION                                                    12/19/2022 10:49:27 PAGE 2   
+C51 COMPILER V9.60.0.0   INITIALISATION                                                    01/04/2023 16:06:19 PAGE 2   
 
   55   1        // 8bit timer, period = 0.25000mS
   56   1        T0CR = 0x07;      // fx/32
@@ -97,71 +97,73 @@ line level    source
   85   1        SCCR = 0x40;
   86   1        wait_100uSec(NOP_COUNT/2);
   87   1        OSCCR = 0x04;
-  88   1        SYSCON_AR = 0x00; // Disable permission
-  89   1        WDTMR = 0x38;
-  90   1      }
-  91          
-  92          void port_init()
-  93          {
-  94   1        // initialize ports
-  95   1        //   2 : PWM2o    out speed control
-  96   1        //  12 : P05      out 
-  97   1        //  15 : EINT10   in  ir remote
-  98   1        P0IO = 0xFB;      // direction
-  99   1        P0PU = 0x00;      // pullup
- 100   1        P0OD = 0x00;      // open drain
- 101   1        P0DB = 0x00;      // debounce
- 102   1        P0   = 0x00;      // port initial value
- 103   1      
- 104   1        P1IO = 0xF7;      // direction
- 105   1        P1PU = 0x00;      // pullup
- 106   1        P1OD = 0x00;      // open drain
- 107   1        P1DB = 0x00;      // debounce
- 108   1        P1   = 0x00;      // port initial value
- 109   1      
- 110   1        P2IO = 0xF0;      // direction
- 111   1        P2PU = 0x00;      // pullup
- 112   1        P2OD = 0x00;      // open drain
- 113   1        P2DB = 0x00;      // debounce
- 114   1        P2   = 0x00;      // port initial value
- 115   1      
- 116   1        // Set port functions
-C51 COMPILER V9.60.0.0   INITIALISATION                                                    12/19/2022 10:49:27 PAGE 3   
+  88   1        WDTMR = 0x00;
+  89   1        SYSCON_AR = 0x00; // Disable permission
+  90   1      //  WDTMR = 0x38;
+  91   1      
+  92   1      }
+  93          
+  94          void port_init()
+  95          {
+  96   1        // initialize ports
+  97   1        //   2 : PWM2o    out speed control
+  98   1        //  12 : P05      out 
+  99   1        //  15 : EINT10   in  ir remote
+ 100   1        P0IO = 0xFB;      // direction 11111011
+ 101   1        P0PU = 0x00;      // pullup
+ 102   1        P0OD = 0x00;      // open drain
+ 103   1        P0DB = 0x00;      // debounce
+ 104   1        P0   = 0x00;      // port initial value
+ 105   1      
+ 106   1        P1IO = 0xF7;      // direction
+ 107   1        P1PU = 0x00;      // pullup
+ 108   1        P1OD = 0x00;      // open drain
+ 109   1        P1DB = 0x00;      // debounce
+ 110   1        P1   = 0x00;      // port initial value
+ 111   1      
+ 112   1        P2IO = 0xF0;      // direction
+ 113   1        P2PU = 0x00;      // pullup
+ 114   1        P2OD = 0x00;      // open drain
+ 115   1        P2DB = 0x00;      // debounce
+ 116   1        P2   = 0x00;      // port initial value
+C51 COMPILER V9.60.0.0   INITIALISATION                                                    01/04/2023 16:06:19 PAGE 3   
 
- 117   1        P0FSRL = 0x30;    // P03~00
- 118   1        P0FSRH = 0x00;    // P07~04
- 119   1        P1FSRL = 0x02;    // P13~10
- 120   1        P1FSRH = 0x00;    // P17~14
- 121   1        P2FSR = 0x70;     // P23~20
- 122   1      }
- 123          
- 124          void  Nop_1us_16Mhz(void)
- 125          {
- 126   1        NOP; NOP; NOP; NOP; // NOP = 62.6ns(@16Mhz) 62.5ns * 16 = 1us
- 127   1        NOP; NOP; NOP; NOP;
- 128   1        NOP; NOP; //NOP; NOP; // LCALL = 2 clock
- 129   1        //NOP; NOP; NOP; NOP; // RET = 4 clock
- 130   1      }
- 131          
- 132          void  wait_100uSec(unsigned int delay)
- 133          {
- 134   1        register unsigned int i;
- 135   1      
- 136   1        for( i = 0; i < (delay*10); i++)
- 137   1        {
- 138   2          Nop_1us_16Mhz();
- 139   2          Nop_1us_16Mhz();
+ 117   1      
+ 118   1        // Set port functions
+ 119   1        P0FSRL = 0x30;    // P03~00
+ 120   1        P0FSRH = 0x00;    // P07~04
+ 121   1        P1FSRL = 0x02;    // P13~10
+ 122   1        P1FSRH = 0x00;    // P17~14
+ 123   1        P2FSR = 0x70;     // P23~20
+ 124   1      }
+ 125          
+ 126          void  Nop_1us_16Mhz(void)
+ 127          {
+ 128   1        NOP; NOP; NOP; NOP; // NOP = 62.6ns(@16Mhz) 62.5ns * 16 = 1us
+ 129   1        NOP; NOP; NOP; NOP;
+ 130   1        NOP; NOP; //NOP; NOP; // LCALL = 2 clock
+ 131   1        //NOP; NOP; NOP; NOP; // RET = 4 clock
+ 132   1      }
+ 133          
+ 134          void  wait_100uSec(unsigned int delay)
+ 135          {
+ 136   1        register unsigned int i;
+ 137   1      
+ 138   1        for( i = 0; i < (delay*10); i++)
+ 139   1        {
  140   2          Nop_1us_16Mhz();
  141   2          Nop_1us_16Mhz();
- 142   2        }
- 143   1      }
- 144          
+ 142   2          Nop_1us_16Mhz();
+ 143   2          Nop_1us_16Mhz();
+ 144   2        }
+ 145   1      }
+ 146          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    232    ----
+   CODE SIZE        =    221    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   ----       2
+   XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

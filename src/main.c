@@ -11,6 +11,11 @@
 #include "flash.h"
 #include	"func_def.h"
 #include  "MotorPara.h"
+//#include    "Intrins.h"
+//#include    "delay.h"     //
+//#include "a94b114_gpio.h"
+//#include "a94b114_clock.h"
+//#include "a94b114_usart.h"
 
 extern unsigned char RemotePress,SleepTimerCompleteFlag_1hr,SleepTimerStartFlag_1hr,TimerStartFlag,LowVoltageResetFlag,Timer_Counter_Complete_Flag;
 unsigned char Command,LED_blink_Counter,LED_blink_Status,Fan_load_Healthy=1;
@@ -21,20 +26,42 @@ extern xdata unsigned int Fan_load_unhealthy_Counter;
 unsigned char OnceProgrameFlag,OneSecTimer;
 //struct variable var;
 struct RemoteStatus RemoteData;
-
 xdata unsigned char Fan_load_helathy_count,Fan_load_healthy_once_flag;
+
+//void putstring(char *str)
+//{
+//	while(*str != 0)
+//		USART_SendDataWithInterrupt(*str++);
+//}
+unsigned char Sleep_Data = 0;
 
 void main()
 {
 	unsigned char Var_Data[14];
 	cli();          	// disable INT. during peripheral setting
 	port_init();    	// initialize ports
+	//LED_Init
+	P0IO |= (1<<5);
+	
 	clock_init();   	// initialize operation clock
 	ExINT_init();   	// initialize external interrupt
+	P2PU |= 0x0C;
+	P2 |= 0x0C;
 	Timer0_init();  	// initialize Timer0
 	Timer1_init();  	// initialize Timer1
 	ADC_init();     	// initialize A/D convertor
-	
+
+//	#ifdef DEBUG
+//		/*Set Alernative Function for USART P14(RX) / P5(TX)*/
+//		Port_SetAlterFunctionpin(PORT1, PIN4, 0x1);
+//		Port_SetAlterFunctionpin(PORT1, PIN5, 0x1);
+//		
+
+//		USART_Initial(9600, USART_DATA_8BIT, USART_STOP_1BIT, USART_PARITY_NO, USART_TX_RX_MODE);
+//		
+////		USART_ConfigureInterrupt(USART_RX_COMPLETE_INT, TRUE);
+//		USART_ConfigureInterrupt(USART_TX_COMPLETE_INT, TRUE);
+//	#endif	//DEBUG
 	P2IO |= 0x03;
 	P2PU |= 0x03;    	// pullup
 	P2 |= 0X03;
@@ -42,12 +69,18 @@ void main()
 	I2C_Motor_Start();
 	P2IO &= ~0x03;
 	P2PU &= ~0X03;
+	
+//	LVI_De_init();
+//	test_self_PGM();
+//	LVI_init();
+//	OnceProgrameFlag = 0x00;
 	Flash_Read(TEST_WRITE_ADDRESS, &OnceProgrameFlag, 1);
 	if(OnceProgrameFlag != 0xAA)
 	{
 		RemoteData.Power = 1;
 		RemoteData.Light = 0;
-		RemoteData.FanSpeed = 5;
+		RemoteData.FanSpeed = 0;//		RemoteData.FanSpeed = 5;Sunil need to change 0 to 5.
+
 		RemoteData.Timer_Hrs = 0;
 		RemoteData.Sleep = 0;
 		test_self_PGM();
@@ -64,17 +97,22 @@ void main()
 		SleepTimerCounter_1hr = (Var_Data[10]) | (Var_Data[11]<<8) | (Var_Data[12]<<16) | (Var_Data[13]<<24);
 	}
 	LVI_init();     	// initialize LVI, LVR
+	WDTMR = 0x00;
 	sei(); 
 	if(RemoteData.Light)
 	{
 		LED_ON;
+		
 	}
 	// enable INT.
 	SystemInitialization();
+//	putstring("a94b114 USART INTERRUPT TEST!!\n");
+
 	// TODO: add your main code here
-	
+//	LED_ON;
 	while(1)
 	{
+
 //		if(Fan_load_Healthy)
 //		{
 //			Fan_load_Line_Monitor();
@@ -100,29 +138,30 @@ void main()
 			test_self_PGM();
 			LVI_init();
 		}
-		if((RemoteData.Sleep)&&(SleepTimerCompleteFlag_1hr))
-		{
-			SleepOperation();
-			LVI_De_init();
-			test_self_PGM();
-			LVI_init();
-		}
-		if((SleepTimerStartFlag_1hr) || (TimerStartFlag))
-		{
-			if(Timer5min >= TIMER_5_MINUTES)
-			{
-				//write flash
-				//test_self_PGM();
-				Timer5min = 0;
-			}
-		}
+//		if((RemoteData.Sleep)&&(SleepTimerCompleteFlag_1hr))
+//		{
+//			SleepOperation();
+//			LVI_De_init();
+//			test_self_PGM();
+//			LVI_init();
+//		}
+//		if((SleepTimerStartFlag_1hr) || (TimerStartFlag))
+//		{
+//			if(Timer5min >= TIMER_5_MINUTES)
+//			{
+//				//write flash
+//				//test_self_PGM();
+//				Timer5min = 0;
+//			}
+//		}
 		if(Timer_Counter_Complete_Flag)
 		{
-			LED_blink_Counter = 2;
-			LED_blink_Status = 1;
+//			LED_blink_Counter = 2;	//Sunil need to uncommand
+//			LED_blink_Status = 1;		//Sunil need to uncommand
+			LED_ON;
 			fan_power_off();
 			//i2c_speed(FAN_OFF_VALUE);
-			Timer_Counter_Complete_Flag = 1;
+//			Timer_Counter_Complete_Flag = 1;
 			RemoteData.Power = 0;
 			RemoteData.Timer_Hrs = REMOTE_TIMER_OFF;
 			TimerStartFlag = 0;
@@ -167,6 +206,7 @@ void process()
 			//OPERTION
 			if(!RemoteData.Sleep)
 				{		
+					Sleep_Data = 1;
 					fanSpeed1();
 				}
 			Command = 0;				
@@ -175,6 +215,7 @@ void process()
 			//OPERTION
 			if(!RemoteData.Sleep)
 				{		
+					Sleep_Data = 2;
 					fanSpeed2();
 				}
 			Command = 0;	
@@ -183,6 +224,7 @@ void process()
 			//OPERTION
 			if(!RemoteData.Sleep)
 				{		
+					Sleep_Data = 3;
 					fanSpeed3();
 				}
 			Command = 0;	
@@ -191,6 +233,7 @@ void process()
 			//OPERTION			
 			if(!RemoteData.Sleep)
 				{		
+					Sleep_Data = 4;
 					fanSpeed4();
 				}
 			Command = 0;	
@@ -199,6 +242,7 @@ void process()
 			//OPERTION
 			if(!RemoteData.Sleep)
 				{		
+					Sleep_Data = 5;
 					fanSpeed5();
 				}
 			Command = 0;	
@@ -207,6 +251,7 @@ void process()
 			//OPERTION
 			if(!RemoteData.Sleep)
 				{		
+					Sleep_Data = 6;
 					fanSpeed6();
 				}
 			Command = 0;	
@@ -224,7 +269,7 @@ void process()
 			if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs != REMOTE_TIMER_2HRS))
 			{				
 				Timer_Hrs_process(REMOTE_TIMER_2HRS);
-				RemoteData.Timer_Hrs = REMOTE_TIMER_2HRS;									
+				RemoteData.Timer_Hrs = REMOTE_TIMER_2HRS;	
 			}
 			else if((RemoteData.Power)&&(!RemoteData.Sleep)&&(RemoteData.Timer_Hrs == REMOTE_TIMER_2HRS))
 			{
@@ -278,7 +323,7 @@ void process()
 			{
 				LED_blink_Counter = 4+(3*(RemoteData.Light));
 				LED_blink_Status = 1;
-				RemoteData.Sleep = 1;
+//				RemoteData.Sleep = 1;	//Sunil need to uncommand.
 				SleepTimerStartFlag_1hr =1;
 				SleepTimerCompleteFlag_1hr = 0;
 				SleepTimerCounter_1hr = 0;
@@ -374,7 +419,7 @@ void SystemInitialization(void)
 	{
 		LED_blink_Counter = 4+(3*(RemoteData.Light));
 		LED_blink_Status = 1;
-		RemoteData.Sleep = 1;
+//		RemoteData.Sleep = 1;	//Sunil need to uncommand.
 		SleepTimerStartFlag_1hr =1;
 		SleepTimerCompleteFlag_1hr = 0;		
 	}

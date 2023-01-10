@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.0.0   FLASH                                                             12/19/2022 10:49:28 PAGE 1   
+C51 COMPILER V9.60.0.0   FLASH                                                             01/04/2023 16:06:19 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE FLASH
 NO OBJECT MODULE REQUESTED
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\flash.c LARGE OPTIMIZE(4,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\flash.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
                     -stings\flash.lst) TABS(2) SRC(.\Objects\flash.SRC)
 
 line level    source
@@ -62,7 +62,7 @@ line level    source
   51          // Do not change this routine.
   52          volatile void do_flash_at_sram_src()    
   53          {
-C51 COMPILER V9.60.0.0   FLASH                                                             12/19/2022 10:49:28 PAGE 2   
+C51 COMPILER V9.60.0.0   FLASH                                                             01/04/2023 16:06:19 PAGE 2   
 
   54   1        #pragma asm
   55   1          mov FEMR,g_FEMR       // 3 byte
@@ -86,9 +86,9 @@ line level    source
   73   1        g_IE = IE;
   74   1        g_IE1 = IE1;
   75   1        g_IE2 = IE2; 
-  76   1        g_WDTMR = WDTMR;  // Backup WDTMR
+  76   1      //  g_WDTMR = WDTMR;  // Backup WDTMR
   77   1        WDTMR = 0;    // Watch Dog Timer Stop.
-  78   1        g_WDTMR |= 0x04;  // Clear WDT Counter
+  78   1      //  g_WDTMR |= 0x04;  // Clear WDT Counter
   79   1        
   80   1        // To access Flash Control register, ENTRY_0~2 should be set 0xAA, 0x55, 0xA5.
   81   1        *(unsigned char xdata *)0x10D8 = 0xAA;
@@ -125,8 +125,8 @@ line level    source
  112   1        djnz  r2, loop0
  113   1      #pragma endasm
  114   1      
- 115   1        WDTMR = g_WDTMR;  // Restore WDTMR
-C51 COMPILER V9.60.0.0   FLASH                                                             12/19/2022 10:49:28 PAGE 3   
+ 115   1      //  WDTMR = g_WDTMR;  // Restore WDTMR
+C51 COMPILER V9.60.0.0   FLASH                                                             01/04/2023 16:06:19 PAGE 3   
 
  116   1         IE = g_IE;
  117   1        IE1 = g_IE1;
@@ -190,7 +190,7 @@ line level    source
  175   1        
  176   1      }
  177          #endif
-C51 COMPILER V9.60.0.0   FLASH                                                             12/19/2022 10:49:28 PAGE 4   
+C51 COMPILER V9.60.0.0   FLASH                                                             01/04/2023 16:06:19 PAGE 4   
 
  178          char Flash_Erase(unsigned int addr)
  179          {
@@ -254,7 +254,7 @@ line level    source
  237   1          // 0x81
  238   1          FEMR = FLASH_SEL                | // FSEL (Select Flash memory)
  239   1                 FLASH_CON_ENABLE         ; // FEEN (Enable program & erase of Flash)
-C51 COMPILER V9.60.0.0   FLASH                                                             12/19/2022 10:49:28 PAGE 5   
+C51 COMPILER V9.60.0.0   FLASH                                                             01/04/2023 16:06:19 PAGE 5   
 
  240   1      
  241   1          // 
@@ -318,12 +318,12 @@ line level    source
  299   1        return 0;
  300   1      }
  301          
-C51 COMPILER V9.60.0.0   FLASH                                                             12/19/2022 10:49:28 PAGE 6   
+C51 COMPILER V9.60.0.0   FLASH                                                             01/04/2023 16:06:19 PAGE 6   
 
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    654    ----
+   CODE SIZE        =    619    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----      22
    PDATA SIZE       =   ----    ----

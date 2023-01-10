@@ -1,6 +1,6 @@
 ; .\Objects\flash.SRC generated from: src\flash.c
 ; COMPILER INVOKED BY:
-;        C:\Keil_v5\C51\BIN\C51.EXE src\flash.c LARGE OPTIMIZE(4,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\flash.lst) TABS(2) SRC(.\Objects\flash.SRC)
+;        C:\Keil_v5\C51\BIN\C51.EXE src\flash.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\flash.lst) TABS(2) SRC(.\Objects\flash.SRC)
 
 $NOMOD51
 
@@ -396,16 +396,12 @@ Flash_Enter:
 ; 	g_IE2 = IE2; 
 			; SOURCE LINE # 75
 	MOV  	g_IE2,IE2
-; 	g_WDTMR = WDTMR;	// Backup WDTMR
-			; SOURCE LINE # 76
-	MOV  	g_WDTMR,WDTMR
+; //	g_WDTMR = WDTMR;	// Backup WDTMR
 ; 	WDTMR	= 0;		// Watch Dog Timer Stop.
 			; SOURCE LINE # 77
 	CLR  	A
 	MOV  	WDTMR,A
-; 	g_WDTMR |= 0x04;	// Clear WDT Counter
-			; SOURCE LINE # 78
-	ORL  	g_WDTMR,#04H
+; //	g_WDTMR |= 0x04;	// Clear WDT Counter
 ; 	
 ; 	// To access Flash Control register, ENTRY_0~2 should be set 0xAA, 0x55, 0xA5.
 ; 	*(unsigned char xdata *)0x10D8 = 0xAA;
@@ -496,9 +492,7 @@ Flash_Exit:
 	  djnz	r2, loop0
 ; #pragma endasm
 ; 
-; 	WDTMR	= g_WDTMR;	// Restore WDTMR
-			; SOURCE LINE # 115
-	MOV  	WDTMR,g_WDTMR
+; //	WDTMR	= g_WDTMR;	// Restore WDTMR
 ; 	 IE = g_IE;
 			; SOURCE LINE # 116
 	MOV  	IE,g_IE
@@ -711,13 +705,13 @@ _Flash_Erase:
 			; SOURCE LINE # 200
 	MOV  	DPTR,#addr?645
 	MOVX 	A,@DPTR
+	MOV  	R6,A
 	INC  	DPTR
 	MOVX 	A,@DPTR
 	MOV  	FEARL,A
 ; 	FEARM = (unsigned char)((addr>>8)&0xff);
 			; SOURCE LINE # 201
-	MOV  	DPTR,#addr?645
-	MOVX 	A,@DPTR
+	MOV  	A,R6
 	MOV  	FEARM,A
 ; 	FEARH = 0;
 			; SOURCE LINE # 202
@@ -758,26 +752,20 @@ _Flash_Erase:
 ; 	// read data  
 ; 	for(i=0; i<PAGEBUF_SIZE;i++){	// Read flash data.
 			; SOURCE LINE # 217
-;---- Variable 'i?646' assigned to Register 'R4/R5' ----
+;---- Variable 'i?646' assigned to Register 'R6/R7' ----
 	CLR  	A
-	MOV  	R5,A
-	MOV  	R4,A
+	MOV  	R7,A
+	MOV  	R6,A
 ?C0012:
-	CLR  	C
-	MOV  	A,R5
-	SUBB 	A,#020H
-	MOV  	A,R4
-	SUBB 	A,#00H
-	JNC  	?C0013
 ; 		if(coderom[addr] != 0x00) 
 			; SOURCE LINE # 218
 	MOV  	DPTR,#addr?645
 	MOVX 	A,@DPTR
-	MOV  	R6,A
+	MOV  	R4,A
 	INC  	DPTR
 	MOVX 	A,@DPTR
 	MOV  	DPL,A
-	MOV  	DPH,R6
+	MOV  	DPH,R4
 	CLR  	A
 	MOVC 	A,@A+DPTR
 	JZ   	?C0015
@@ -801,12 +789,14 @@ _Flash_Erase:
 ?C0026:
 ; 	}
 			; SOURCE LINE # 222
-	INC  	R5
-	MOV  	A,R5
-	JNZ  	?C0027
-	INC  	R4
+	INC  	R7
+	CJNE 	R7,#00H,?C0027
+	INC  	R6
 ?C0027:
-	SJMP 	?C0012
+	MOV  	A,R7
+	XRL  	A,#020H
+	ORL  	A,R6
+	JNZ  	?C0012
 ?C0013:
 ; 	return 0;
 			; SOURCE LINE # 223
@@ -873,13 +863,13 @@ _Flash_Write:
 			; SOURCE LINE # 244
 	MOV  	DPTR,#addr?748
 	MOVX 	A,@DPTR
+	MOV  	R6,A
 	INC  	DPTR
 	MOVX 	A,@DPTR
 	MOV  	FEARL,A
 ; 	FEARM = (unsigned char)((addr>>8)&0xff);
 			; SOURCE LINE # 245
-	MOV  	DPTR,#addr?748
-	MOVX 	A,@DPTR
+	MOV  	A,R6
 	MOV  	FEARM,A
 ; 	FEARH = 0x00;
 			; SOURCE LINE # 246
@@ -888,7 +878,7 @@ _Flash_Write:
 ; 
 ;     write_page_buffer(dt);
 			; SOURCE LINE # 248
-	MOV  	DPTR,#dt?749
+	INC  	DPTR
 	MOVX 	A,@DPTR
 	MOV  	R3,A
 	INC  	DPTR
@@ -966,14 +956,6 @@ _Flash_Write:
 	INC  	DPTR
 	MOVX 	@DPTR,A
 ?C0018:
-	CLR  	C
-	MOV  	DPTR,#i?750+01H
-	MOVX 	A,@DPTR
-	SUBB 	A,#020H
-	MOV  	DPTR,#i?750
-	MOVX 	A,@DPTR
-	SUBB 	A,#00H
-	JNC  	?C0019
 ; 	{	
 			; SOURCE LINE # 275
 ; 		if (coderom[addr]!=*pdt) 
@@ -1029,7 +1011,14 @@ _Flash_Write:
 	INC  	A
 	MOVX 	@DPTR,A
 ?C0029:
-	SJMP 	?C0018
+	MOV  	DPTR,#i?750
+	MOVX 	A,@DPTR
+	JNZ  	?C0030
+	INC  	DPTR
+	MOVX 	A,@DPTR
+	XRL  	A,#020H
+?C0030:
+	JNZ  	?C0018
 ?C0019:
 ; 	
 ; 	return 0;
@@ -1048,13 +1037,13 @@ _Flash_Write:
 _Flash_Read:
 	USING	0
 			; SOURCE LINE # 286
+;---- Variable 'dt?854' assigned to Register 'R1/R2/R3' ----
 	MOV  	DPTR,#addr?853
 	MOV  	A,R6
 	MOVX 	@DPTR,A
 	INC  	DPTR
 	MOV  	A,R7
 	MOVX 	@DPTR,A
-;---- Variable 'dt?854' assigned to Register 'R1/R2/R3' ----
 ; {
 			; SOURCE LINE # 287
 ; 	unsigned int i;
@@ -1066,13 +1055,8 @@ _Flash_Read:
 ;---- Variable 'pdt?857' assigned to Register 'R1/R2/R3' ----
 ; 	for(i=addr; i<(addr+length); i++)	// Read flash data.
 			; SOURCE LINE # 293
-	MOV  	DPTR,#addr?853
-	MOVX 	A,@DPTR
-	MOV  	R7,A
-	INC  	DPTR
-	MOVX 	A,@DPTR
 	MOV  	DPTR,#i?856
-	XCH  	A,R7
+	MOV  	A,R6
 	MOVX 	@DPTR,A
 	INC  	DPTR
 	MOV  	A,R7
@@ -1089,24 +1073,23 @@ _Flash_Read:
 	MOVX 	A,@DPTR
 	ADDC 	A,#00H
 	MOV  	R6,A
-	CLR  	C
-	MOV  	DPTR,#i?856+01H
-	MOVX 	A,@DPTR
-	SUBB 	A,R7
 	MOV  	DPTR,#i?856
 	MOVX 	A,@DPTR
+	MOV  	R4,A
+	INC  	DPTR
+	MOVX 	A,@DPTR
+	MOV  	R5,A
+	CLR  	C
+	SUBB 	A,R7
+	MOV  	A,R4
 	SUBB 	A,R6
 	JNC  	?C0023
 ; 	{
 			; SOURCE LINE # 294
 ; 		*pdt = coderom[i];
 			; SOURCE LINE # 295
-	MOVX 	A,@DPTR
-	MOV  	R6,A
-	INC  	DPTR
-	MOVX 	A,@DPTR
-	MOV  	DPL,A
-	MOV  	DPH,R6
+	MOV  	DPL,R5
+	MOV  	DPH,R4
 	CLR  	A
 	MOVC 	A,@A+DPTR
 	LCALL	?C?CSTPTR
@@ -1124,12 +1107,12 @@ _Flash_Read:
 	MOVX 	A,@DPTR
 	INC  	A
 	MOVX 	@DPTR,A
-	JNZ  	?C0030
+	JNZ  	?C0022
 	MOV  	DPTR,#i?856
 	MOVX 	A,@DPTR
 	INC  	A
 	MOVX 	@DPTR,A
-?C0030:
+?C0031:
 	SJMP 	?C0022
 ?C0023:
 ; 	

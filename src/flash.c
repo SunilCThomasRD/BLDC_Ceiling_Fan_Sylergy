@@ -73,9 +73,9 @@ void Flash_Enter()
 	g_IE = IE;
 	g_IE1 = IE1;
 	g_IE2 = IE2; 
-	g_WDTMR = WDTMR;	// Backup WDTMR
+//	g_WDTMR = WDTMR;	// Backup WDTMR
 	WDTMR	= 0;		// Watch Dog Timer Stop.
-	g_WDTMR |= 0x04;	// Clear WDT Counter
+//	g_WDTMR |= 0x04;	// Clear WDT Counter
 	
 	// To access Flash Control register, ENTRY_0~2 should be set 0xAA, 0x55, 0xA5.
 	*(unsigned char xdata *)0x10D8 = 0xAA;
@@ -112,7 +112,7 @@ loop0:
 	djnz	r2, loop0
 #pragma endasm
 
-	WDTMR	= g_WDTMR;	// Restore WDTMR
+//	WDTMR	= g_WDTMR;	// Restore WDTMR
 	 IE = g_IE;
 	IE1 = g_IE1;
 	IE2 = g_IE2; 

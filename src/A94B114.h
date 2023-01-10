@@ -5,6 +5,8 @@
 //==========================================================
 
 //----------------------------------------------------- 0x80
+#ifndef __A94B114_H_
+#define __A94B114_H_
 sfr     P0          =   0x80;
 sbit    P07         =   0x87;
 sbit   	P06	        =   0x86;
@@ -320,3 +322,4 @@ sfr     FETR        =   0xE7; // Flash and EEPROM TEST register
 #define bitint_dis()	(BIT_INT_EN = 0)
 #define lviint_dis()	(LVI_INT_EN = 0)
 // ==================================================================== //
+#endif  /* End of __A96G174_H_ */

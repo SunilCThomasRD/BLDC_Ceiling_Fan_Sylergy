@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.0.0   FLASH_OPERATION                                                   12/19/2022 10:49:28 PAGE 1   
+C51 COMPILER V9.60.0.0   FLASH_OPERATION                                                   01/04/2023 16:06:19 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE FLASH_OPERATION
 OBJECT MODULE PLACED IN .\Objects\Flash operation.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\Flash operation.c LARGE OPTIMIZE(4,SPEED) BROWSE DEBUG OBJECTEXTEND 
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\Flash operation.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND 
                     -PRINT(.\Listings\Flash operation.lst) TABS(2) OBJECT(.\Objects\Flash operation.obj)
 
 line level    source
@@ -27,7 +27,7 @@ line level    source
   17          //bit debug_flag;
   18          
   19          extern struct RemoteStatus RemoteData;
-  20          
+  20          unsigned char OnceProgrameFlag_Dummy;
   21          //------------------------------------------------------------------------------
   22          //  C51: SOFTWARE RESET
   23          void  reset (void)
@@ -62,7 +62,7 @@ line level    source
   52   1        test_flash_pattern[13] = ((SleepTimerCounter_1hr>>24) & 0xFF);
   53   1          
   54   1        //pAddr is the sector number ,A94B114 has 255 sectors(0 ~ 255).
-C51 COMPILER V9.60.0.0   FLASH_OPERATION                                                   12/19/2022 10:49:28 PAGE 2   
+C51 COMPILER V9.60.0.0   FLASH_OPERATION                                                   01/04/2023 16:06:19 PAGE 2   
 
   55   1        //the 255th sector,last 32 byte flash addr :0x1FE0~0x1FFF (8160~8192)
   56   1        flash_sector_num    = TEST_WRITE_SECTOR;
@@ -80,32 +80,34 @@ line level    source
   68   2          return SELF_PGM_VERIFY_ERROR; 
   69   2        }
   70   1        
-  71   1        return SELF_PGM_OK;
-  72   1      }
-  73          //------------------------------------------------------------------------------
-  74          /*void MainFlash( void )
-  75          {
-  76          //------------------------------------------------------------------------------
-  77          //    interrupt select
+  71   1        Flash_Read(TEST_WRITE_ADDRESS, &OnceProgrameFlag_Dummy, 1);
+  72   1      
+  73   1        return SELF_PGM_OK;
+  74   1      }
+  75          //------------------------------------------------------------------------------
+  76          /*void MainFlash( void )
+  77          {
   78          //------------------------------------------------------------------------------
-  79            debug_SFR0 = IRQ0;
-  80            debug_SFR0 = IRQ1;
-  81            debug_SFR0 = IRQ2;
-  82            
-  83            debug_count = 0;
-  84            stop_flag = 0;
-  85            debug_flag = 0; 
-  86            EA = 1;
-  87          
-  88          }*/
+  79          //    interrupt select
+  80          //------------------------------------------------------------------------------
+  81            debug_SFR0 = IRQ0;
+  82            debug_SFR0 = IRQ1;
+  83            debug_SFR0 = IRQ2;
+  84            
+  85            debug_count = 0;
+  86            stop_flag = 0;
+  87            debug_flag = 0; 
+  88            EA = 1;
   89          
-  90          
+  90          }*/
+  91          
+  92          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    334    ----
+   CODE SIZE        =    309    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      2       3
+   XDATA SIZE       =      3       2
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----      32

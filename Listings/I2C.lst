@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.0.0   I2C                                                               12/19/2022 10:49:29 PAGE 1   
+C51 COMPILER V9.60.0.0   I2C                                                               01/04/2023 16:06:19 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE I2C
 OBJECT MODULE PLACED IN .\Objects\I2C.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\I2C.C LARGE OPTIMIZE(4,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE src\I2C.C LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
                     -ings\I2C.lst) TABS(2) OBJECT(.\Objects\I2C.obj)
 
 line level    source
@@ -62,7 +62,7 @@ line level    source
   52   1        i2c_devicew(EECtrl_Base_address, 0x20);
   53   1        
   54   1        // wait 10msec
-C51 COMPILER V9.60.0.0   I2C                                                               12/19/2022 10:49:29 PAGE 2   
+C51 COMPILER V9.60.0.0   I2C                                                               01/04/2023 16:06:19 PAGE 2   
 
   55   1        do{
   56   1          MTP_Refreshing_Staus = i2c_devicer(EECtrl_Base_address);    
@@ -126,7 +126,7 @@ line level    source
  114   1        delaytime(100);
  115   1        //GPIO_WriteHigh(GPIOC, GPIO_PIN_5);
  116   1        P2 |= (1<<0);
-C51 COMPILER V9.60.0.0   I2C                                                               12/19/2022 10:49:29 PAGE 3   
+C51 COMPILER V9.60.0.0   I2C                                                               01/04/2023 16:06:19 PAGE 3   
 
  117   1        delaytime(100);
  118   1        //GPIO_WriteHigh(GPIOC, GPIO_PIN_4);
@@ -190,7 +190,7 @@ line level    source
  176   2          //GPIO_WriteLow(GPIOC, GPIO_PIN_5);
  177   2          P2 &= ~(1<<0);
  178   2          delaytime(100);
-C51 COMPILER V9.60.0.0   I2C                                                               12/19/2022 10:49:29 PAGE 4   
+C51 COMPILER V9.60.0.0   I2C                                                               01/04/2023 16:06:19 PAGE 4   
 
  179   2          i = i>>1;
  180   2        }
@@ -254,7 +254,7 @@ line level    source
  238          {
  239   1        unsigned int i=0;
  240   1        for(i=0;i<ch;i++)
-C51 COMPILER V9.60.0.0   I2C                                                               12/19/2022 10:49:29 PAGE 5   
+C51 COMPILER V9.60.0.0   I2C                                                               01/04/2023 16:06:19 PAGE 5   
 
  241   1        {
  242   2          //for(j=0;j<ch;j++);
@@ -318,7 +318,7 @@ line level    source
  298   1        //unsigned char dataArray[20];
  299   1        for(i=0;i<=19;i++)
  300   1        {
-C51 COMPILER V9.60.0.0   I2C                                                               12/19/2022 10:49:29 PAGE 6   
+C51 COMPILER V9.60.0.0   I2C                                                               01/04/2023 16:06:19 PAGE 6   
 
  301   2          dummy1 = i2c_devicer(32+i);
  302   2          if(i <= 18)
@@ -364,7 +364,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1203    ----
+   CODE SIZE        =    971    ----
    CONSTANT SIZE    =     20    ----
    XDATA SIZE       =      2      38
    PDATA SIZE       =   ----    ----
